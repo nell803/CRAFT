@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRAFT — Сайты, боты и автоматизация для бизнеса</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1011;--bg2:#141516;--line:#26282a;--tx:#eceae5;--tx2:#8a8880;--acc:#7a9ab0;--mono:'JetBrains Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+
+.scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--acc),#a0c4d8);z-index:101;width:0%;transition:width .1s linear;box-shadow:0 0 8px rgba(122,154,176,.5)}
+
+.ct{max-width:1440px;margin:0 auto;padding:0 2.5rem}
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(15,16,17,.6);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2.5rem;max-width:1440px;margin:0 auto}
+.logo{font-family:'Space Grotesk';font-size:1.1rem;font-weight:600;letter-spacing:.02em}
+.logo span{color:var(--acc)}
+.nav-r{display:flex;gap:2rem;align-items:center}
+.nav-r a{color:var(--tx2);text-decoration:none;font-size:.85rem;transition:color .3s;position:relative}
+.nav-r a:hover{color:var(--tx)}
+.nav-r a::after{content:'';position:absolute;bottom:-4px;left:0;width:100%;height:1px;background:var(--acc);transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+.nav-r a:hover::after{transform:scaleX(1)}
+.ls{background:transparent;border:1px solid var(--line);color:var(--tx);padding:.4rem .9rem;border-radius:4px;cursor:pointer;font-size:.75rem;font-family:var(--mono);letter-spacing:.05em;transition:.3s}
+.ls:hover{border-color:var(--acc);color:var(--acc)}
+
+.hero{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#000}
+.hero-bg{position:absolute;inset:0;z-index:0;display:flex;align-items:center;justify-content:center}
+.hero-bg img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+
+.hero-glass{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;padding:2rem 3rem;text-align:center;max-width:90vw}
+.hero-tag{font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,0.7);letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.5rem}
+.hero-title{font-family:'Space Grotesk';font-size:clamp(3rem, 6vw, 6rem);font-weight:700;line-height:1.05;letter-spacing:-.03em;position:relative;z-index:2;color:rgba(255,255,255,0.12);text-shadow:0 1px 0 rgba(255,255,255,0.1),0 2px 0 rgba(255,255,255,0.08),0 3px 0 rgba(255,255,255,0.06);text-align:center}
+.hero-title em{font-style:normal;color:var(--tx)}
+.hero-sub{margin-top:1.2rem;font-size:.85rem;color:rgba(255,255,255,0.6);font-weight:300;letter-spacing:.05em}
+.hero-bottom{position:absolute;bottom:12%;left:2.5rem;z-index:2;max-width:280px}
+.hero-desc{font-size:.8rem;color:var(--tx2);font-weight:300;line-height:1.55;margin-bottom:1.5rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--tx);color:var(--bg);padding:.75rem 1.3rem;border-radius:4px;font-weight:500;font-size:.8rem;text-decoration:none;transition:.3s;border:1px solid var(--tx);cursor:pointer}
+.btn:hover{background:transparent;color:var(--tx)}
+.btn svg{width:12px;height:12px;fill:currentColor}
+.sec{padding:7rem 0;border-top:1px solid var(--line);position:relative;overflow:hidden;background:#000}
+.sec-h{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:4rem;position:relative;z-index:1}
+.sec-n{font-family:var(--mono);font-size:.7rem;color:var(--acc);letter-spacing:.1em;margin-bottom:1rem}
+.sec-t{font-family:'Space Grotesk';font-size:clamp(2rem,4vw,3.5rem);font-weight:500;letter-spacing:-.02em;line-height:1.05;max-width:800px}
+.sec-sub{font-size:.95rem;color:var(--tx2);font-weight:300;margin-top:1rem;max-width:60ch;line-height:1.6}
+#srv{position:relative;padding:7rem 0;border-top:1px solid var(--line);overflow:hidden;background:#000;cursor:none}
+#srv .sec-bg-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
+#srv .sec-bg-canvas canvas{display:block;width:100%;height:100%}
+#srv .ct{position:relative;z-index:2}
+#srv .srv{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(255,255,255,.08)}
+#srv .srv-i{padding:2.5rem 0;border-bottom:1px solid rgba(255,255,255,.08);border-right:1px solid rgba(255,255,255,.08);transition:background .4s,transform .3s;cursor:none}
+#srv .srv-i:last-child{border-right:none}
+#srv .srv-i:hover{background:rgba(255,255,255,.04)}
+#srv .srv-n{font-family:var(--mono);font-size:.7rem;color:var(--acc);letter-spacing:.08em;margin-bottom:2rem}
+#srv .srv-t{font-family:'Space Grotesk';font-size:1.5rem;font-weight:500;margin-bottom:1rem;letter-spacing:-.01em;color:#fff}
+#srv .srv-d{color:rgba(255,255,255,.55);font-size:.9rem;font-weight:300;line-height:1.55;max-width:32ch}
+#srv .srv-p{font-family:var(--mono);font-size:.85rem;color:#fff;margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,.08)}
+#srv .srv-p span{color:var(--acc)}
+#srv .srv-note{text-align:center;margin-top:2.5rem;font-family:var(--mono);font-size:.75rem;color:var(--tx2);letter-spacing:.05em}
+.pain-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+
+.tilt-card{position:relative;padding:2rem;border:1px solid var(--line);border-radius:8px;background:var(--bg2);transform-style:preserve-3d;perspective:1000px;will-change:transform;overflow:hidden;transition:box-shadow .3s ease}
+.tilt-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(122,154,176,0.15) 0%, transparent 60%);opacity:0;transition:opacity .3s ease;pointer-events:none;z-index:1}
+.tilt-card:hover::before{opacity:1}
+.tilt-card:hover{box-shadow:0 20px 40px rgba(0,0,0,.4), 0 0 0 1px rgba(122,154,176,.2)}
+.tilt-card > *{position:relative;z-index:2}
+
+.pain-card{padding:2rem}
+.pain-icon{font-family:var(--mono);font-size:1.5rem;color:var(--acc);margin-bottom:1rem}
+.pain-title{font-family:'Space Grotesk';font-size:1.15rem;font-weight:600;margin-bottom:.5rem;color:var(--tx)}
+.pain-text{font-size:.9rem;color:var(--tx2);font-weight:300;line-height:1.55}
+.pain-conclusion{text-align:center;margin-top:3rem;font-family:'Space Grotesk';font-size:1.3rem;color:var(--tx);font-weight:500}
+.pain-conclusion span{color:var(--acc)}
+
+.audience-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+.audience-card{padding:2rem 1.5rem}
+.audience-card:hover{background:rgba(122,154,176,.03)}
+.audience-icon{width:48px;height:48px;margin-bottom:1rem;display:flex;align-items:center;justify-content:center}
+.audience-icon svg{width:32px;height:32px;stroke:var(--acc);stroke-width:1.5;fill:none}
+.audience-title{font-family:'Space Grotesk';font-size:1.1rem;font-weight:600;margin-bottom:.5rem;color:var(--tx)}
+.audience-text{font-size:.85rem;color:var(--tx2);font-weight:300;line-height:1.5}
+
+.guarantee-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.guarantee-card{padding:2.5rem 2rem;text-align:center}
+.guarantee-icon{width:56px;height:56px;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center}
+.guarantee-icon svg{width:36px;height:36px;stroke:var(--acc);stroke-width:1.5;fill:none}
+.guarantee-title{font-family:'Space Grotesk';font-size:1.2rem;font-weight:600;margin-bottom:.75rem;color:var(--tx)}
+.guarantee-text{font-size:.9rem;color:var(--tx2);font-weight:300;line-height:1.55}
+
+.includes-list{max-width:800px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:1rem 2rem}
+.includes-item{display:flex;align-items:flex-start;gap:.75rem;font-size:.95rem;color:var(--tx);font-weight:300;line-height:1.5}
+.includes-item .check{color:var(--acc);font-weight:600;flex-shrink:0;margin-top:2px}
+
+.compare-table{width:100%;border-collapse:collapse;margin-top:1rem}
+.compare-table th,.compare-table td{padding:1.2rem 1.5rem;text-align:left;border-bottom:1px solid var(--line);font-size:.95rem}
+.compare-table th{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+.compare-table th:first-child{color:var(--tx2)}
+.compare-table td:first-child{color:var(--tx2)}
+.compare-table td:nth-child(2){color:var(--tx);font-weight:400}
+.compare-table td:nth-child(3){color:var(--tx);font-weight:500}
+
+.faq-list{max-width:800px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--line);padding:1.5rem 0;cursor:pointer}
+.faq-q{display:flex;justify-content:space-between;align-items:center;font-family:'Space Grotesk';font-size:1.1rem;font-weight:500;color:var(--tx);transition:color .3s}
+.faq-item:hover .faq-q{color:var(--acc)}
+.faq-toggle{font-family:var(--mono);font-size:1.2rem;color:var(--acc);transition:transform .4s cubic-bezier(0.34,1.56,0.64,1)}
+.faq-item.open .faq-toggle{transform:rotate(135deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,opacity .3s ease,padding .3s;font-size:.9rem;color:var(--tx2);font-weight:300;line-height:1.6;opacity:0}
+.faq-item.open .faq-a{max-height:300px;padding-top:1rem;opacity:1}
+
+.steps{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);position:relative;z-index:1}
+.stp{padding:2rem 0;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stp:last-child{border-right:none}
+.stp-n{font-family:var(--mono);font-size:.7rem;color:var(--acc);letter-spacing:.08em;margin-bottom:1rem}
+.stp-t{font-family:'Space Grotesk';font-size:1.2rem;font-weight:500;margin-bottom:.8rem}
+.stp-d{color:var(--tx2);font-size:.85rem;font-weight:300;line-height:1.5}
+
+.live-badge{position:absolute;top:0.8rem;right:0.8rem;background:rgba(76, 175, 80, 0.9);color:white;padding:0.3rem 0.7rem;border-radius:20px;font-size:0.65rem;font-weight:600;display:flex;align-items:center;gap:0.35rem;backdrop-filter:blur(8px);z-index:3;letter-spacing:0.05em;text-transform:uppercase}
+.live-badge__dot{width:5px;height:5px;background:white;border-radius:50%;animation:pulse-live 2s infinite}
+@keyframes pulse-live{0%, 100% { opacity:1; box-shadow:0 0 0 0 rgba(255,255,255,0.7); } 50% { opacity:0.6; box-shadow:0 0 0 5px rgba(255,255,255,0); }}
+
+.marquee-section{padding:7rem 0;border-top:1px solid var(--line);background:var(--bg);overflow:hidden;position:relative}
+.marquee-section .sec-h{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:3rem}
+.marquee-wrapper{position:relative;width:100%;overflow:hidden}
+.marquee-track{display:flex;gap:0.75rem;width:max-content;animation:scroll 80s linear infinite;padding:10px 0}
+.marquee-track.reverse{animation-direction:reverse;margin-top:1.5rem;padding:4px 0}
+.marquee-track:hover{animation-play-state:paused}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-33.333%)}}
+.review-card{width:320px;flex-shrink:0;background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:1rem;display:flex;flex-direction:column;gap:0.5rem}
+.review-card:hover{border-color:var(--acc)}
+.review-header{display:flex;align-items:center;gap:0.5rem}
+.review-avatar{width:28px;height:28px;border-radius:50%;background:var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.65rem;color:var(--tx2);font-weight:600}
+.review-info{display:flex;flex-direction:column}
+.review-name{font-family:'Space Grotesk';font-size:.85rem;font-weight:600;color:var(--tx)}
+.review-role{font-size:.7rem;color:var(--tx2);margin-top:0}
+.review-stars{color:var(--acc);font-size:.7rem;letter-spacing:1px;margin-bottom:0.2rem}
+.review-text{font-size:.8rem;color:var(--tx2);line-height:1.5;font-weight:300}
+.marquee-fade-left,.marquee-fade-right{position:absolute;top:0;bottom:0;width:150px;z-index:10;pointer-events:none}
+.marquee-fade-left{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+.marquee-fade-right{right:0;background:linear-gradient(to left,var(--bg),transparent)}
+
+.custom-cursor{position:fixed;pointer-events:none;z-index:10000;opacity:0;transform:translate(-50%,-100%) scale(0.8);transition:opacity .25s ease,transform .25s ease;will-change:transform,opacity}
+.custom-cursor.visible{opacity:1;transform:translate(-50%,-100%) scale(1)}
+.custom-cursor__bubble{position:relative;background:rgba(255,255,255,0.95);color:#000;padding:6px 14px;border-radius:20px;font-family:'Space Grotesk',sans-serif;font-size:.75rem;font-weight:500;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.1);backdrop-filter:blur(8px)}
+.custom-cursor__bubble::after{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid rgba(255,255,255,0.95)}
+.custom-cursor__dot{width:8px;height:8px;background:#fff;border-radius:50%;margin:4px auto 0;box-shadow:0 0 10px rgba(255,255,255,.6);transition:transform .15s ease}
+.custom-cursor.clicking .custom-cursor__dot{transform:scale(1.8)}
+.custom-cursor.clicking .custom-cursor__bubble{transform:scale(0.9);transition:transform .1s ease}
+#srv *,#srv *::before,#srv *::after{cursor:none !important}
+
+#contact{padding:7rem 0;border-top:1px solid var(--line);background:#000}
+.contact-card{position:relative;display:grid;grid-template-columns:2fr 1fr;border:1px solid var(--line);background:var(--bg2);box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+.contact-card .plus{position:absolute;width:24px;height:24px;color:var(--tx2);opacity:0.4;z-index:2}
+.contact-card .plus-tl{top:-12px;left:-12px}
+.contact-card .plus-tr{top:-12px;right:-12px}
+.contact-card .plus-bl{bottom:-12px;left:-12px}
+.contact-card .plus-br{bottom:-12px;right:-12px}
+.contact-card__info{padding:3rem;display:flex;flex-direction:column;justify-content:space-between;gap:2rem}
+.contact-card__title{font-family:'Space Grotesk';font-size:clamp(2rem,5vw,3.5rem);font-weight:600;letter-spacing:-.02em;line-height:1.05;color:var(--tx)}
+.contact-card__title em{font-style:normal;color:var(--tx)}
+.contact-card__desc{color:var(--tx2);font-size:.95rem;font-weight:300;line-height:1.6;max-width:42ch}
+.contact-card__items{display:grid;grid-template-columns:1fr;gap:1rem;margin-top:1rem}
+.contact-card__item{display:flex;align-items:center;gap:.75rem;padding:.75rem 0}
+.contact-card__item-icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.04);border:1px solid var(--line);border-radius:8px;color:var(--tx2);flex-shrink:0}
+.contact-card__item-icon svg{width:20px;height:20px}
+.contact-card__item-label{font-family:var(--mono);font-size:.7rem;color:var(--tx2);letter-spacing:.05em;margin-bottom:.2rem}
+.contact-card__item-value{font-size:.85rem;color:var(--tx);font-weight:400}
+.contact-card__item-value a{color:var(--tx);text-decoration:none;transition:color .3s;cursor:pointer;position:relative}
+.contact-card__item-value a::after{content:'';position:absolute;bottom:-2px;left:0;width:100%;height:1px;background:var(--acc);transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+.contact-card__item-value a:hover::after{transform:scaleX(1)}
+.contact-card__item-value a:hover{color:var(--acc)}
+.contact-card__form{background:rgba(255,255,255,0.02);border-left:1px solid var(--line);padding:2rem;display:flex;flex-direction:column;justify-content:center}
+.contact-card__form .field{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem}
+.contact-card__form label{font-family:var(--mono);font-size:.7rem;color:var(--tx2);letter-spacing:.05em}
+.contact-card__form input,.contact-card__form textarea{background:var(--bg);border:1px solid var(--line);color:var(--tx);padding:.75rem 1rem;border-radius:4px;font-family:'Inter',sans-serif;font-size:.9rem;transition:border-color .3s;outline:none;resize:vertical}
+.contact-card__form input:focus,.contact-card__form textarea:focus{border-color:var(--tx2)}
+.contact-card__form textarea{min-height:80px}
+.contact-card__form button{width:100%;background:var(--tx);color:var(--bg);border:none;padding:.9rem;border-radius:4px;font-family:'Space Grotesk';font-weight:500;font-size:.95rem;cursor:pointer;transition:all 0.3s ease;margin-top:.5rem}
+.contact-card__form button:hover{background:rgba(236,234,229,0.85)}
+.contact-card__form button:disabled{cursor:not-allowed;opacity:0.7}
+.contact-card__form button.success{background:#4CAF50;color:#fff}
+.contact-card__form button.error{background:#f44336;color:#fff}
+.cta-micro{font-family:var(--mono);font-size:.7rem;color:var(--tx2);letter-spacing:.05em;margin-top:1rem;text-align:center}
+
+.fi{opacity:0;transform:translateY(20px);transition:opacity .9s ease,transform .9s ease}
+.fi.v{opacity:1;transform:translateY(0)}
+.fi.d1{transition-delay:0s}
+.fi.d2{transition-delay:.15s}
+.fi.d3{transition-delay:.3s}
+.fi.d4{transition-delay:.45s}
+
+.reveal-title{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
+.reveal-title.v{opacity:1;transform:translateY(0)}
+
+.animated-icon svg path,
+.animated-icon svg circle,
+.animated-icon svg line,
+.animated-icon svg polyline,
+.animated-icon svg rect,
+.animated-icon svg polygon{
+  stroke-dasharray:100;
+  stroke-dashoffset:100;
+  transition:stroke-dashoffset 1s ease;
+}
+.animated-icon.v svg path,
+.animated-icon.v svg circle,
+.animated-icon.v svg line,
+.animated-icon.v svg polyline,
+.animated-icon.v svg rect,
+.animated-icon.v svg polygon{
+  stroke-dashoffset:0;
+}
+
+footer{padding:2rem 2.5rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-family:var(--mono);font-size:.7rem;color:var(--tx2);letter-spacing:.05em;background:#000}
+
+.cases-list{display:flex;flex-direction:column;gap:2rem}
+.case-card{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;border:1px solid var(--line);border-radius:12px;padding:1.5rem;background:var(--bg2);text-decoration:none;color:inherit;position:relative;overflow:hidden}
+.case-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(122,154,176,0.1) 0%, transparent 60%);opacity:0;transition:opacity .3s ease;pointer-events:none;z-index:0}
+.case-card:hover::before{opacity:1}
+.case-card:hover{border-color:var(--acc);box-shadow:0 20px 40px rgba(0,0,0,.4)}
+.case-card__preview{position:relative;aspect-ratio:16/10;border-radius:8px;overflow:hidden;background:var(--bg);z-index:1}
+.case-card__image{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .6s cubic-bezier(0.25,0.46,0.45,0.94)}
+.case-card:hover .case-card__image{transform:scale(1.05)}
+.case-card__info{display:flex;flex-direction:column;justify-content:center;gap:1rem;z-index:1}
+.case-card__head{display:flex;align-items:center;gap:0.75rem}
+.case-card__icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.case-card__icon svg{width:28px;height:28px;stroke:var(--acc);stroke-width:1.5;fill:none}
+.case-card__title{font-family:'Space Grotesk';font-size:1.4rem;font-weight:600;color:var(--tx);letter-spacing:-.01em}
+.case-card__desc{font-size:.9rem;color:var(--tx2);font-weight:300;line-height:1.55}
+.case-card__meta{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding:1.25rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.case-card__meta-item{display:flex;flex-direction:column;gap:.35rem}
+.case-card__meta-label{font-family:var(--mono);font-size:.65rem;color:var(--tx2);letter-spacing:.1em;text-transform:uppercase}
+.case-card__meta-value{font-family:'Space Grotesk';font-size:.95rem;color:var(--tx);font-weight:500}
+.case-card__link{display:inline-flex;align-items:center;gap:.4rem;color:var(--acc);font-size:.8rem;font-weight:500;transition:gap .3s;position:relative}
+.case-card__link::after{content:'';position:absolute;bottom:-2px;left:0;width:100%;height:1px;background:var(--acc);transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+.case-card:hover .case-card__link{gap:.7rem}
+.case-card:hover .case-card__link::after{transform:scaleX(1)}
+.case-card__link svg{width:13px;height:13px;transition:transform .3s}
+.case-card:hover .case-card__link svg{transform:translateX(3px)}
+
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.why-card{position:relative;padding:2.5rem 2rem;border:1px solid var(--line);border-radius:12px;background:var(--bg2);transition:all .4s ease;overflow:hidden}
+.why-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--acc),#a0c4d8);transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+.why-card:hover::before{transform:scaleX(1)}
+.why-card:hover{border-color:rgba(122,154,176,.3);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.why-number{font-family:var(--mono);font-size:3rem;font-weight:700;color:rgba(122,154,176,.15);line-height:1;margin-bottom:1.5rem}
+.why-title{font-family:'Space Grotesk';font-size:1.4rem;font-weight:600;color:var(--tx);margin-bottom:1rem;letter-spacing:-.01em}
+.why-text{font-size:.95rem;color:var(--tx2);font-weight:300;line-height:1.6}
+
+/* LiveOrb Section - aligned with STRIDE, no border/background */
+.cases-wrapper{display:grid;grid-template-columns:400px 1fr;grid-template-rows:auto auto auto;gap:2rem;align-items:start}
+.live-orb-section{grid-column:1;grid-row:2;position:relative}
+.live-orb-container{width:100%;height:400px;position:relative;overflow:visible}
+.live-orb-canvas{width:100%;height:100%;display:block}
+.live-orb-fallback{position:absolute;inset:8%;overflow:hidden;border-radius:50%;background:#F4F4F5}
+.live-orb-eye{position:absolute;border-radius:50%;background:#09090B;width:13%;height:28%}
+.live-orb-eye.left{left:31%;top:34%}
+.live-orb-eye.right{left:56%;top:34%}
+.cases-list{grid-column:2;grid-row:1/4}
+
+@media(max-width:1100px){
+  .cases-wrapper{grid-template-columns:1fr;grid-template-rows:auto}
+  .live-orb-section{grid-column:1;grid-row:2}
+  .cases-list{grid-column:1;grid-row:1/4}
+  .live-orb-container{height:300px;max-width:400px;margin:0 auto}
+}
+
+@media(max-width:900px){
+  .ct{padding:0 1.25rem}
+  nav{padding:1rem 1.25rem}
+  .nav-r a:not(.ls){display:none}
+  .hero-glass{padding:1.5rem 1.5rem;max-width:95vw}
+  .hero-title{font-size:clamp(2rem, 8vw, 3rem)}
+  .hero-bottom{left:1.25rem;max-width:calc(100% - 2.5rem);bottom:5%;position:relative;margin-top:1rem}
+  #srv .srv,.steps,.pain-grid,.audience-grid,.guarantee-grid,.includes-list,.why-grid{grid-template-columns:1fr}
+  #srv .srv-i,.stp{border-right:none}
+  .contact-card{grid-template-columns:1fr}
+  .contact-card__form{border-left:none;border-top:1px solid var(--line)}
+  .contact-card__info{padding:2rem}
+  .contact-card__form{padding:1.5rem}
+  #srv{cursor:auto}
+  #srv *,#srv *::before,#srv *::after{cursor:auto !important}
+  .custom-cursor{display:none}
+  .review-card{width:260px}
+  .marquee-fade-left,.marquee-fade-right{width:60px}
+  .compare-table{font-size:.8rem}
+  .compare-table th,.compare-table td{padding:.75rem}
+  .case-card{grid-template-columns:1fr;gap:1.5rem}
+  .case-card__meta{grid-template-columns:1fr}
+  .live-orb-container{height:250px}
+}
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<div class="custom-cursor" id="customCursor">
+  <div class="custom-cursor__bubble">нажми</div>
+  <div class="custom-cursor__dot"></div>
+</div>
+<header><nav>
+<div class="logo">CRAFT<span>.</span></div>
+<div class="nav-r">
+<a href="#services">Услуги</a>
+<a href="#process">Процесс</a>
+<a href="#cases">Кейсы</a>
+<a href="#faq">FAQ</a>
+<a href="#contact">Контакты</a>
+<button class="ls" id="ls">EN</button>
+</div>
+</nav></header>
+
+<section class="hero">
+<div class="hero-bg">
+<img src="фото%20для%20портфолио/craft-hero.jpg" alt="CRAFT Hero">
+</div>
+<div class="hero-glass fi">
+<div class="hero-tag" data-ru="WEB · BOTS · AUTOMATION · 2026" data-en="WEB · BOTS · AUTOMATION · 2026">WEB · BOTS · AUTOMATION · 2026</div>
+<h1 class="hero-title reveal-title" data-ru="Увеличиваем продажи<br>через сайты и автоматизацию" data-en="Growing sales through<br>websites and automation">Увеличиваем продажи<br>через сайты и автоматизацию</h1>
+<div class="hero-sub reveal-title" data-ru="Сайты · Telegram-боты · Магазин цифровых товаров" data-en="Websites · Telegram bots · Digital stores">Сайты · Telegram-боты · Магазин цифровых товаров</div>
+</div>
+<div class="hero-bottom fi d1">
+<p class="hero-desc" data-ru="За 1–3 недели создаём digital-решения, которые экономят ваше время и приносят заявки. От лендинга до магазина с автоматической выдачей товара." data-en="In 1–3 weeks we build digital solutions that save your time and generate leads. From landing pages to stores with automated delivery.">За 1–3 недели создаём digital-решения, которые экономят ваше время и приносят заявки. От лендинга до магазина с автоматической выдачей товара.</p>
+<a href="#contact" class="btn" data-ru="Рассчитать стоимость" data-en="Calculate cost">Рассчитать стоимость <svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+</div>
+</section>
+
+<section class="sec" id="pain">
+<div class="ct">
+<div class="sec-h">
+  <div class="sec-n reveal-title" data-ru="[01] — ПРОБЛЕМЫ" data-en="[01] — PROBLEMS">[01] — ПРОБЛЕМЫ</div>
+  <h2 class="sec-t reveal-title" data-ru="Узнаёте себя?" data-en="Sound familiar?">Узнаёте себя?</h2>
+  <p class="sec-sub reveal-title" data-ru="Мы работаем с бизнесом, который столкнулся с типичными digital-проблемами." data-en="We work with businesses facing typical digital challenges.">Мы работаем с бизнесом, который столкнулся с типичными digital-проблемами.</p>
+</div>
+<div class="pain-grid">
+  <div class="pain-card tilt-card fi d1"><div class="pain-icon">01</div><h3 class="pain-title" data-ru="Сайт есть, заявок нет" data-en="Site exists, no leads">Сайт есть, заявок нет</h3><p class="pain-text" data-ru="Вы платите за хостинг и домен, но телефон молчит. Конверсия близка к нулю, и непонятно, что менять." data-en="You pay for hosting and domain, but the phone is silent. Conversion is near zero and it's unclear what to change.">Вы платите за хостинг и домен, но телефон молчит. Конверсия близка к нулю, и непонятно, что менять.</p></div>
+  <div class="pain-card tilt-card fi d2"><div class="pain-icon">02</div><h3 class="pain-title" data-ru="Менеджеры тонут в рутине" data-en="Managers drown in routine">Менеджеры тонут в рутине</h3><p class="pain-text" data-ru="Одни и те же вопросы, ручная запись, потерянные клиенты в переписках. Время уходит на процессы, а не на продажи." data-en="Same questions, manual booking, lost clients in chats. Time goes to processes, not sales.">Одни и те же вопросы, ручная запись, потерянные клиенты в переписках. Время уходит на процессы, а не на продажи.</p></div>
+  <div class="pain-card tilt-card fi d3"><div class="pain-icon">03</div><h3 class="pain-title" data-ru="Конкуренты уже автоматизировались" data-en="Competitors already automated">Конкуренты уже автоматизировались</h3><p class="pain-text" data-ru="Они отвечают за 3 секунды, продают ночью и не теряют лиды. Вы — ещё нет." data-en="They reply in 3 seconds, sell at night and don't lose leads. You — not yet.">Они отвечают за 3 секунды, продают ночью и не теряют лиды. Вы — ещё нет.</p></div>
+  <div class="pain-card tilt-card fi d4"><div class="pain-icon">04</div><h3 class="pain-title" data-ru="Подрядчики пропадают" data-en="Contractors disappear">Подрядчики пропадают</h3><p class="pain-text" data-ru="Сроки срываются, сметы раздуваются, код передают «как есть». Вы устали от сюрпризов." data-en="Deadlines slip, estimates inflate, code is handed over 'as is'. You're tired of surprises.">Сроки срываются, сметы раздуваются, код передают «как есть». Вы устали от сюрпризов.</p></div>
+</div>
+<div class="pain-conclusion fi" data-ru="Мы решаем эти проблемы за <span>1–3 недели</span>" data-en="We solve these problems in <span>1–3 weeks</span>">Мы решаем эти проблемы за <span>1–3 недели</span></div>
+</div>
+</section>
+
+<section class="sec" id="audience">
+<div class="ct">
+<div class="sec-h">
+  <div class="sec-n reveal-title" data-ru="[02] — ДЛЯ КОГО" data-en="[02] — FOR WHOM">[02] — ДЛЯ КОГО</div>
+  <h2 class="sec-t reveal-title" data-ru="С кем мы работаем" data-en="Who we work with">С кем мы работаем</h2>
+  <p class="sec-sub reveal-title" data-ru="Четыре типа клиентов, которым наши решения приносят максимум пользы." data-en="Four types of clients who get the most value from our solutions.">Четыре типа клиентов, которым наши решения приносят максимум пользы.</p>
+</div>
+<div class="audience-grid">
+  <div class="audience-card tilt-card fi d1"><div class="audience-icon animated-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><h3 class="audience-title" data-ru="Малый бизнес" data-en="Small business">Малый бизнес</h3><p class="audience-text" data-ru="Кофейни, салоны, студии. Нужен сайт + бот для онлайн-записи и сбора заявок." data-en="Cafes, salons, studios. Need a site + bot for online booking and lead capture.">Кофейни, салоны, студии. Нужен сайт + бот для онлайн-записи и сбора заявок.</p></div>
+  <div class="audience-card tilt-card fi d2"><div class="audience-icon animated-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><h3 class="audience-title" data-ru="Инфобизнес и эксперты" data-en="Info-business & experts">Инфобизнес и эксперты</h3><p class="audience-text" data-ru="Курсы, консультации, гайды. Нужна автоматическая продажа цифровых товаров 24/7." data-en="Courses, consultations, guides. Need automated 24/7 sales of digital products.">Курсы, консультации, гайды. Нужна автоматическая продажа цифровых товаров 24/7.</p></div>
+  <div class="audience-card tilt-card fi d3"><div class="audience-icon animated-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><h3 class="audience-title" data-ru="Стартапы" data-en="Startups">Стартапы</h3><p class="audience-text" data-ru="Нужно быстро запустить MVP, проверить идею и начать получать первых клиентов." data-en="Need to launch MVP fast, validate the idea and get first clients.">Нужно быстро запустить MVP, проверить идею и начать получать первых клиентов.</p></div>
+  <div class="audience-card tilt-card fi d4"><div class="audience-icon animated-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><h3 class="audience-title" data-ru="Компании" data-en="Companies">Компании</h3><p class="audience-text" data-ru="Корпоративный сайт, автоматизация процессов, интеграция с CRM и внутренними системами." data-en="Corporate site, process automation, CRM and internal systems integration.">Корпоративный сайт, автоматизация процессов, интеграция с CRM и внутренними системами.</p></div>
+</div>
+</div>
+</section>
+
+<section id="srv">
+<div class="sec-bg-canvas"><canvas id="flow-canvas"></canvas></div>
+<div class="ct">
+<div class="sec-h">
+<div class="sec-n reveal-title" data-ru="[03] — УСЛУГИ И ЦЕНЫ" data-en="[03] — SERVICES & PRICING">[03] — УСЛУГИ И ЦЕНЫ</div>
+<h2 class="sec-t reveal-title" data-ru="Прозрачные цены. Индивидуальный подход." data-en="Transparent pricing. Individual approach.">Прозрачные цены. Индивидуальный подход.</h2>
+<p class="sec-sub reveal-title" data-ru="Ниже — ориентировочные цены. Точную смету мы составим бесплатно после 15-минутного обсуждения вашей задачи." data-en="Below are indicative prices. We'll prepare an exact quote for free after a 15-minute discussion of your task.">Ниже — ориентировочные цены. Точную смету мы составим бесплатно после 15-минутного обсуждения вашей задачи.</p>
+</div>
+<div class="srv">
+<div class="srv-i fi d1 magnetic-card"><div class="srv-n">01 / WEB</div><h3 class="srv-t" data-ru="Лендинги и сайты" data-en="Landing pages & sites">Лендинги и сайты</h3><p class="srv-d" data-ru="Продающие лендинги и корпоративные сайты. Адаптивная вёрстка, формы заявок, базовое SEO, высокая скорость." data-en="Selling landing pages and corporate sites. Responsive layout, lead forms, basic SEO, high speed.">Продающие лендинги и корпоративные сайты. Адаптивная вёрстка, формы заявок, базовое SEO, высокая скорость.</p><div class="srv-p"><span data-ru="от 25 000 ₽" data-en="from 25 000 ₽">от 25 000 ₽</span> · 1–2 нед.</div></div>
+<div class="srv-i fi d2 magnetic-card"><div class="srv-n">02 / SHOP</div><h3 class="srv-t" data-ru="Магазины цифровых товаров" data-en="Digital goods stores">Магазины цифровых товаров</h3><p class="srv-d" data-ru="Каталог без ограничений, корзина, онлайн-оплата, мгновенная выдача курса/файла/доступа после оплаты." data-en="Unlimited catalog, cart, online payment, instant delivery of course/file/access after payment.">Каталог без ограничений, корзина, онлайн-оплата, мгновенная выдача курса/файла/доступа после оплаты.</p><div class="srv-p"><span data-ru="от 45 000 ₽" data-en="from 45 000 ₽">от 45 000 ₽</span> · 2–4 нед.</div></div>
+<div class="srv-i fi d3 magnetic-card"><div class="srv-n">03 / BOTS</div><h3 class="srv-t" data-ru="Telegram-боты" data-en="Telegram bots">Telegram-боты</h3><p class="srv-d" data-ru="Боты для заявок, записи, продаж. Интеграция с Google Таблицами и CRM. Приём платежей внутри бота." data-en="Bots for leads, booking, sales. Google Sheets & CRM integration. In-bot payments.">Боты для заявок, записи, продаж. Интеграция с Google Таблицами и CRM. Приём платежей внутри бота.</p><div class="srv-p"><span data-ru="от 15 000 ₽" data-en="from 15 000 ₽">от 15 000 ₽</span> · 3–14 дн.</div></div>
+</div>
+<div class="srv-note fi" data-ru="→ Точную цену уточняйте после обсуждения задачи" data-en="→ Ask for exact price after discussing your task">→ Точную цену уточняйте после обсуждения задачи</div>
+</div>
+</section>
+
+<section class="sec" id="compare">
+<div class="ct">
+<div class="sec-h">
+  <div class="sec-n reveal-title" data-ru="[04] — СРАВНЕНИЕ" data-en="[04] — COMPARISON">[04] — СРАВНЕНИЕ</div>
+  <h2 class="sec-t reveal-title" data-ru="С автоматизацией и без" data-en="With automation vs without">С автоматизацией и без</h2>
+  <p class="sec-sub reveal-title" data-ru="Что меняется, когда процессы работают сами." data-en="What changes when processes run themselves.">Что меняется, когда процессы работают сами.</p>
+</div>
+<table class="compare-table fi">
+  <thead><tr><th data-ru="Ситуация" data-en="Situation">Ситуация</th><th data-ru="Без автоматизации" data-en="Without automation">Без автоматизации</th><th data-ru="С CRAFT" data-en="With CRAFT">С CRAFT</th></tr></thead>
+  <tbody>
+    <tr><td data-ru="Ответ клиенту" data-en="Client reply">Ответ клиенту</td><td data-ru="2 часа вручную" data-en="2 hours manually">2 часа вручную</td><td data-ru="3 секунды, бот" data-en="3 seconds, bot">3 секунды, бот</td></tr>
+    <tr><td data-ru="Обработка заявок" data-en="Lead processing">Обработка заявок</td><td data-ru="10 заявок/день" data-en="10 leads/day">10 заявок/день</td><td data-ru="100+ автоматически" data-en="100+ automatically">100+ автоматически</td></tr>
+    <tr><td data-ru="Продажи ночью" data-en="Night sales">Продажи ночью</td><td data-ru="Клиент уходит" data-en="Client leaves">Клиент уходит</td><td data-ru="Клиент покупает" data-en="Client buys">Клиент покупает</td></tr>
+    <tr><td data-ru="Отчёты" data-en="Reports">Отчёты</td><td data-ru="4 часа в неделю" data-en="4 hours/week">4 часа в неделю</td><td data-ru="Формируются сами" data-en="Generated automatically">Формируются сами</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<section class="sec" id="process">
+<div class="ct">
+<div class="sec-h">
+<div class="sec-n reveal-title" data-ru="[05] — ПРОЦЕСС" data-en="[05] — PROCESS">[05] — ПРОЦЕСС</div>
+<h2 class="sec-t reveal-title" data-ru="4 шага к результату" data-en="4 steps to result">4 шага к результату</h2>
+</div>
+</div>
+<div class="steps">
+<div class="stp fi d1"><div class="stp-n" data-ru="01 · 1 ДЕНЬ" data-en="01 · 1 DAY">01 · 1 ДЕНЬ</div><h3 class="stp-t" data-ru="Брифинг" data-en="Briefing">Брифинг</h3><p class="stp-d" data-ru="Созваниваемся на 30 минут, разбираем задачу, фиксируем ТЗ и сроки." data-en="30-min call, task breakdown, fixed spec and deadlines.">Созваниваемся на 30 минут, разбираем задачу, фиксируем ТЗ и сроки.</p></div>
+<div class="stp fi d2"><div class="stp-n" data-ru="02 · 3–5 ДНЕЙ" data-en="02 · 3–5 DAYS">02 · 3–5 ДНЕЙ</div><h3 class="stp-t" data-ru="Дизайн" data-en="Design">Дизайн</h3><p class="stp-d" data-ru="Прототип в Figma, согласование каждого блока. Правки до начала кода." data-en="Figma prototype, block-by-block approval. Revisions before coding.">Прототип в Figma, согласование каждого блока. Правки до начала кода.</p></div>
+<div class="stp fi d3"><div class="stp-n" data-ru="03 · 5–10 ДНЕЙ" data-en="03 · 5–10 DAYS">03 · 5–10 ДНЕЙ</div><h3 class="stp-t" data-ru="Разработка" data-en="Development">Разработка</h3><p class="stp-d" data-ru="Пишем код, подключаем интеграции." data-en="We code, connect integrations.">Пишем код, подключаем интеграции.</p></div>
+<div class="stp fi d4"><div class="stp-n" data-ru="04 · 2 ДНЯ" data-en="04 · 2 DAYS">04 · 2 ДНЯ</div><h3 class="stp-t" data-ru="Тест и запуск" data-en="Test & launch">Тест и запуск</h3><p class="stp-d" data-ru="Тестирование, деплой, передача доступов. 14 дней поддержки." data-en="Testing, deploy, access handover. 14 days support.">Тестирование, деплой, передача доступов. 14 дней поддержки.</p></div>
+</div>
+</section>
+
+<section class="sec" id="guarantees">
+<div class="ct">
+<div class="sec-h">
+  <div class="sec-n reveal-title" data-ru="[06] — ГАРАНТИИ" data-en="[06] — GUARANTEES">[06] — ГАРАНТИИ</div>
+  <h2 class="sec-t reveal-title" data-ru="Работаем без рисков для вас" data-en="Working without risks for you">Работаем без рисков для вас</h2>
+  <p class="sec-sub reveal-title" data-ru="Три принципа, которые защищают ваши деньги и время." data-en="Three principles that protect your money and time.">Три принципа, которые защищают ваши деньги и время.</p>
+</div>
+<div class="guarantee-grid">
+  <div class="guarantee-card tilt-card fi d1"><div class="guarantee-icon animated-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3 class="guarantee-title" data-ru="Фиксированная цена" data-en="Fixed price">Фиксированная цена</h3><p class="guarantee-text" data-ru="Никаких «а вот это ещё доплатите». Смету утверждаем до начала работ — и она не меняется." data-en="No 'oh this costs extra'. Estimate approved before work starts — and it doesn't change.">Никаких «а вот это ещё доплатите». Смету утверждаем до начала работ — и она не меняется.</p></div>
+  <div class="guarantee-card tilt-card fi d2"><div class="guarantee-icon animated-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h3 class="guarantee-title" data-ru="Точные сроки" data-en="Exact deadlines">Точные сроки</h3><p class="guarantee-text" data-ru="За каждый день просрочки возвращаем 5% от стоимости проекта." data-en="For each day of delay we return 5% of project cost.">За каждый день просрочки возвращаем 5% от стоимости проекта.</p></div>
+  <div class="guarantee-card tilt-card fi d3"><div class="guarantee-icon animated-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><h3 class="guarantee-title" data-ru="Гарантия результата" data-en="Result guarantee">Гарантия результата</h3><p class="guarantee-text" data-ru="Если сайт не запустится или будут баги — исправляем бесплатно до полного решения." data-en="If site doesn't launch or has bugs — we fix for free until fully resolved.">Если сайт не запустится или будут баги — исправляем бесплатно до полного решения.</p></div>
+</div>
+</div>
+</section>
+
+<section class="sec" id="includes">
+<div class="ct">
+<div class="sec-h">
+  <div class="sec-n reveal-title" data-ru="[07] — КОМПЛЕКТАЦИЯ" data-en="[07] — WHAT'S INCLUDED">[07] — КОМПЛЕКТАЦИЯ</div>
+  <h2 class="sec-t reveal-title" data-ru="Что входит в каждый проект" data-en="What's included in every project">Что входит в каждый проект</h2>
+  <p class="sec-sub reveal-title" data-ru="Стандартный набор, который вы получаете независимо от тарифа." data-en="Standard package you get regardless of tier.">Стандартный набор, который вы получаете независимо от тарифа.</p>
+</div>
+<div class="includes-list fi">
+  <div class="includes-item"><span class="check">✓</span><span data-ru="Уникальный дизайн (не шаблон)" data-en="Unique design (not a template)">Уникальный дизайн (не шаблон)</span></div>
+  <div class="includes-item"><span class="check">✓</span><span data-ru="Адаптивная вёрстка (все устройства)" data-en="Responsive layout (all devices)">Адаптивная вёрстка (все устройства)</span></div>
+  <div class="includes-item"><span class="check">✓</span><span data-ru="Базовая SEO-оптимизация" data-en="Basic SEO optimization">Базовая SEO-оптимизация</span></div>
+  <div class="includes-item"><span class="check">✓</span><span data-ru="Подключение аналитики (Метрика, GA)" data-en="Analytics setup (Metrica, GA)">Подключение аналитики (Метрика, GA)</span></div>
+  <div class="includes-item"><span class="check">✓</span><span data-ru="Форма заявок + уведомления в Telegram" data-en="Lead form + Telegram notifications">Форма заявок + уведомления в Telegram</span></div>
+  <div class="includes-item"><span class="check">✓</span><span data-ru="Помощь с хостингом и доменом" data-en="Help with hosting and domain">Помощь с хостингом и доменом</span></div>
+  <div class="includes-item"><span class="check">✓</span><span data-ru="14 дней бесплатной поддержки" data-en="14 days free support">14 дней бесплатной поддержки</span></div>
+</div>
+</div>
+</section>
+
+<section class="sec" id="cases">
+<div class="ct">
+<div class="sec-h">
+  <div class="sec-n reveal-title" data-ru="[08] — КЕЙСЫ" data-en="[08] — CASES">[08] — КЕЙСЫ</div>
+  <h2 class="sec-t reveal-title" data-ru="Реальные проекты с результатом" data-en="Real projects with results">Реальные проекты с результатом</h2>
+</div>
+
+<div class="cases-wrapper">
+  <!-- LiveOrb - aligned with STRIDE (row 2), no border/background -->
+  <div class="live-orb-section fi d1">
+    <div class="live-orb-container">
+      <canvas class="live-orb-canvas" id="live-orb-canvas"></canvas>
+      <div class="live-orb-fallback" id="live-orb-fallback" style="display:none">
+        <div class="live-orb-eye left"></div>
+        <div class="live-orb-eye right"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cases List - spans all 3 rows in right column -->
+  <div class="cases-list">
+    <a href="https://nell803.github.io/noircoffee/" target="_blank" rel="noopener" class="case-card fi d1">
+      <div class="case-card__preview"><div class="case-card__image" style="background-image: url('фото%20для%20портфолио/noir-preview.jpg');"></div><div class="live-badge"><span class="live-badge__dot"></span>Live</div></div>
+      <div class="case-card__info">
+        <div class="case-card__head"><div class="case-card__icon animated-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg></div><h3 class="case-card__title" data-ru="NOIR Coffee" data-en="NOIR Coffee">NOIR Coffee</h3></div>
+        <p class="case-card__desc" data-ru="Сайт спешалти кофейни + Telegram-бот для бронирования. Задача: увеличить онлайн-заявки." data-en="Specialty coffee site + Telegram booking bot. Goal: increase online leads.">Сайт спешалти кофейни + Telegram-бот для бронирования. Задача: увеличить онлайн-заявки.</p>
+        <div class="case-card__meta">
+          <div class="case-card__meta-item"><span class="case-card__meta-label" data-ru="Задача" data-en="Goal">Задача</span><span class="case-card__meta-value" data-ru="Увеличить онлайн-бронирование" data-en="Increase online booking">Увеличить онлайн-бронирование</span></div>
+          <div class="case-card__meta-item"><span class="case-card__meta-label" data-ru="Решение" data-en="Solution">Решение</span><span class="case-card__meta-value" data-ru="Сайт + Telegram-бот" data-en="Site + Telegram bot">Сайт + Telegram-бот</span></div>
+          <div class="case-card__meta-item"><span class="case-card__meta-label" data-ru="Срок" data-en="Timeline">Срок</span><span class="case-card__meta-value" data-ru="2 недели" data-en="2 weeks">2 недели</span></div>
+        </div>
+        <div class="case-card__link" data-ru="Открыть сайт" data-en="Open site">Открыть сайт<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      </div>
+    </a>
+    
+    <a href="https://nell803.github.io/stride/" target="_blank" rel="noopener" class="case-card fi d2">
+      <div class="case-card__preview"><div class="case-card__image" style="background-image: url('фото%20для%20портфолио/stride-preview.jpg');"></div><div class="live-badge"><span class="live-badge__dot"></span>Live</div></div>
+      <div class="case-card__info">
+        <div class="case-card__head"><div class="case-card__icon animated-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 2v4"/></svg></div><h3 class="case-card__title" data-ru="STRIDE" data-en="STRIDE">STRIDE</h3></div>
+        <p class="case-card__desc" data-ru="Fashion-агентство. Задача: запустить онлайн-каталог с корзиной и кастомным UX." data-en="Fashion agency. Goal: launch online catalog with cart and custom UX.">Fashion-агентство. Задача: запустить онлайн-каталог с корзиной и кастомным UX.</p>
+        <div class="case-card__meta">
+          <div class="case-card__meta-item"><span class="case-card__meta-label" data-ru="Задача" data-en="Goal">Задача</span><span class="case-card__meta-value" data-ru="Каталог + корзина" data-en="Catalog + cart">Каталог + корзина</span></div>
+          <div class="case-card__meta-item"><span class="case-card__meta-label" data-ru="Решение" data-en="Solution">Решение</span><span class="case-card__meta-value" data-ru="3D-карусель, корзина" data-en="3D carousel, cart">3D-карусель, корзина</span></div>
+          <div class="case-card__meta-item"><span class="case-card__meta-label" data-ru="Срок" data-en="Timeline">Срок</span><span class="case-card__meta-value" data-ru="3 недели" data-en="3 weeks">3 недели</span></div>
+        </div>
+        <div class="case-card__link" data-ru="Открыть сайт" data-en="Open site">Открыть сайт<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      </div>
+    </a>
+    
+    <a href="https://nell803.github.io/lumina/" target="_blank" rel="noopener" class="case-card fi d3">
+      <div class="case-card__preview"><div class="case-card__image" style="background-image: url('фото%20для%20портфолио/lumina-preview.jpg');"></div><div class="live-badge"><span class="live-badge__dot"></span>Live</div></div>
+      <div class="case-card__info">
+        <div class="case-card__head"><div class="case-card__icon animated-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg></div><h3 class="case-card__title" data-ru="LUMINA Analytics" data-en="LUMINA Analytics">LUMINA Analytics</h3></div>
+        <p class="case-card__desc" data-ru="SaaS-платформа. Задача: просто объяснить сложный продукт и собирать демо-заявки." data-en="SaaS platform. Goal: explain complex product simply and collect demo requests.">SaaS-платформа. Задача: просто объяснить сложный продукт и собирать демо-заявки.</p>
+        <div class="case-card__meta">
+          <div class="case-card__meta-item"><span class="case-card__meta-label" data-ru="Задача" data-en="Goal">Задача</span><span class="case-card__meta-value" data-ru="Презентовать SaaS" data-en="Present SaaS">Презентовать SaaS</span></div>
+          <div class="case-card__meta-item"><span class="case-card__meta-label" data-ru="Решение" data-en="Solution">Решение</span><span class="case-card__meta-value" data-ru="Лендинг + калькулятор" data-en="Landing + calculator">Лендинг + калькулятор</span></div>
+          <div class="case-card__meta-item"><span class="case-card__meta-label" data-ru="Срок" data-en="Timeline">Срок</span><span class="case-card__meta-value" data-ru="2 недели" data-en="2 weeks">2 недели</span></div>
+        </div>
+        <div class="case-card__link" data-ru="Открыть сайт" data-en="Open site">Открыть сайт<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      </div>
+    </a>
+  </div>
+</div>
+
+</div>
+</section>
+
+<section class="sec" id="why">
+<div class="ct">
+<div class="sec-h">
+  <div class="sec-n reveal-title" data-ru="[09] — ПРЕИМУЩЕСТВА" data-en="[09] — WHY US">[09] — ПРЕИМУЩЕСТВА</div>
+  <h2 class="sec-t reveal-title" data-ru="Почему именно CRAFT" data-en="Why CRAFT">Почему именно CRAFT</h2>
+  <p class="sec-sub reveal-title" data-ru="Чем мы отличаемся от студий и фрилансеров." data-en="How we differ from studios and freelancers.">Чем мы отличаемся от студий и фрилансеров.</p>
+</div>
+<div class="why-grid">
+  <div class="why-card fi d1">
+    <div class="why-number">01</div>
+    <h3 class="why-title" data-ru="Скорость" data-en="Speed">Скорость</h3>
+    <p class="why-text" data-ru="Запускаем за 1–3 недели, а не за 3 месяца как крупные студии." data-en="Launch in 1–3 weeks, not 3 months like big studios.">Запускаем за 1–3 недели, а не за 3 месяца как крупные студии.</p>
+  </div>
+  <div class="why-card fi d2">
+    <div class="why-number">02</div>
+    <h3 class="why-title" data-ru="Честные цены" data-en="Fair prices">Честные цены</h3>
+    <p class="why-text" data-ru="Без раздутого штата и офисов — вы не переплачиваете за воздух." data-en="No bloated staff or offices — you don't overpay for air.">Без раздутого штата и офисов — вы не переплачиваете за воздух.</p>
+  </div>
+  <div class="why-card fi d3">
+    <div class="why-number">03</div>
+    <h3 class="why-title" data-ru="Комплексный подход" data-en="Full-stack approach">Комплексный подход</h3>
+    <p class="why-text" data-ru="Сайт + бот + автоматизация в одном месте. Не нужно искать трёх подрядчиков." data-en="Site + bot + automation in one place. No need to find three contractors.">Сайт + бот + автоматизация в одном месте. Не нужно искать трёх подрядчиков.</p>
+  </div>
+</div>
+</div>
+</section>
+
+<section class="marquee-section" id="reviews">
+  <div class="ct">
+    <div class="sec-h">
+      <div class="sec-n reveal-title" data-ru="[10] — ОТЗЫВЫ" data-en="[10] — REVIEWS">[10] — ОТЗЫВЫ</div>
+      <h2 class="sec-t reveal-title" data-ru="Что говорят клиенты" data-en="What clients say">Что говорят клиенты</h2>
+    </div>
+  </div>
+  <div class="marquee-wrapper">
+    <div class="marquee-fade-left"></div>
+    <div class="marquee-fade-right"></div>
+    <div class="marquee-track">
+      <div class="review-card"><div class="review-header"><div class="review-avatar">АМ</div><div class="review-info"><div class="review-name">Алексей М.</div><div class="review-role">Владелец интернет-магазина</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Конверсия в корзину выросла на 15% по сравнению со старым сайтом. Потребовалось несколько итераций для настройки мобильного каталога, но в итоге результатом очень доволен, код чистый.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">МК</div><div class="review-info"><div class="review-name">Марина К.</div><div class="review-role">Управляющая сетью салонов</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Бот для онлайн-записи работает стабильно уже полгода. Сняла звезду за то, что релиз задержался на три дня из-за сложностей со сторонним API. Но команду держали в курсе.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ДВ</div><div class="review-info"><div class="review-name">Дмитрий В.</div><div class="review-role">Партнер юридической фирмы</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Дизайн строгий и солидный, полностью соответствует нише. Отдельное спасибо за инициативу: разработчики сами предложили сократить поля в форме, что увеличило число заявок.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ИС</div><div class="review-info"><div class="review-name">Игорь С.</div><div class="review-role">Владелец автосервиса</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Сделали хороший лендинг. Был недочет: на некоторых браузерах не подгружалась карта. Написал в поддержку, ошибку исправили за два часа. Звезду снял за то, что не отловили это при тестировании.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ЕП</div><div class="review-info"><div class="review-name">Елена П.</div><div class="review-role">Руководитель онлайн-школы</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Настраивали интеграцию сайта с CRM. Задача нетривиальная, но справились за неделю. Теперь заявки автоматически попадают в воронку, менеджеры не тратят время на ручной ввод. Профессионально.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">СД</div><div class="review-info"><div class="review-name">Сергей Д.</div><div class="review-role">Основатель службы доставки</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">На этапе дизайна пришлось подробно объяснять требования к цветовой гамме, первый вариант показался слишком нейтральным. Команда оперативно внесла правки. Итоговый сайт выглядит современно.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">АМ</div><div class="review-info"><div class="review-name">Алексей М.</div><div class="review-role">Владелец интернет-магазина</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Конверсия в корзину выросла на 15% по сравнению со старым сайтом. Потребовалось несколько итераций для настройки мобильного каталога, но в итоге результатом очень доволен, код чистый.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">МК</div><div class="review-info"><div class="review-name">Марина К.</div><div class="review-role">Управляющая сетью салонов</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Бот для онлайн-записи работает стабильно уже полгода. Сняла звезду за то, что релиз задержался на три дня из-за сложностей со сторонним API. Но команду держали в курсе.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ДВ</div><div class="review-info"><div class="review-name">Дмитрий В.</div><div class="review-role">Партнер юридической фирмы</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Дизайн строгий и солидный, полностью соответствует нише. Отдельное спасибо за инициативу: разработчики сами предложили сократить поля в форме, что увеличило число заявок.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ИС</div><div class="review-info"><div class="review-name">Игорь С.</div><div class="review-role">Владелец автосервиса</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Сделали хороший лендинг. Был недочет: на некоторых браузерах не подгружалась карта. Написал в поддержку, ошибку исправили за два часа. Звезду снял за то, что не отловили это при тестировании.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ЕП</div><div class="review-info"><div class="review-name">Елена П.</div><div class="review-role">Руководитель онлайн-школы</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Настраивали интеграцию сайта с CRM. Задача нетривиальная, но справились за неделю. Теперь заявки автоматически попадают в воронку, менеджеры не тратят время на ручной ввод. Профессионально.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">СД</div><div class="review-info"><div class="review-name">Сергей Д.</div><div class="review-role">Основатель службы доставки</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">На этапе дизайна пришлось подробно объяснять требования к цветовой гамме, первый вариант показался слишком нейтральным. Команда оперативно внесла правки. Итоговый сайт выглядит современно.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">АМ</div><div class="review-info"><div class="review-name">Алексей М.</div><div class="review-role">Владелец интернет-магазина</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Конверсия в корзину выросла на 15% по сравнению со старым сайтом. Потребовалось несколько итераций для настройки мобильного каталога, но в итоге результатом очень доволен, код чистый.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">МК</div><div class="review-info"><div class="review-name">Марина К.</div><div class="review-role">Управляющая сетью салонов</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Бот для онлайн-записи работает стабильно уже полгода. Сняла звезду за то, что релиз задержался на три дня из-за сложностей со сторонним API. Но команду держали в курсе.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ДВ</div><div class="review-info"><div class="review-name">Дмитрий В.</div><div class="review-role">Партнер юридической фирмы</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Дизайн строгий и солидный, полностью соответствует нише. Отдельное спасибо за инициативу: разработчики сами предложили сократить поля в форме, что увеличило число заявок.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ИС</div><div class="review-info"><div class="review-name">Игорь С.</div><div class="review-role">Владелец автосервиса</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Сделали хороший лендинг. Был недочет: на некоторых браузерах не подгружалась карта. Написал в поддержку, ошибку исправили за два часа. Звезду снял за то, что не отловили это при тестировании.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ЕП</div><div class="review-info"><div class="review-name">Елена П.</div><div class="review-role">Руководитель онлайн-школы</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Настраивали интеграцию сайта с CRM. Задача нетривиальная, но справились за неделю. Теперь заявки автоматически попадают в воронку, менеджеры не тратят время на ручной ввод. Профессионально.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">СД</div><div class="review-info"><div class="review-name">Сергей Д.</div><div class="review-role">Основатель службы доставки</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">На этапе дизайна пришлось подробно объяснять требования к цветовой гамме, первый вариант показался слишком нейтральным. Команда оперативно внесла правки. Итоговый сайт выглядит современно.</p></div>
+    </div>
+    <div class="marquee-track reverse">
+      <div class="review-card"><div class="review-header"><div class="review-avatar">АР</div><div class="review-info"><div class="review-name">Андрей Р.</div><div class="review-role">Частный риелтор</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Понравилось, что на этапе брифинга задали много уточняющих вопросов о специфике работы, о которых я сам не подумал. Сайт получился удобным, первые обращения пошли на второй неделе.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ОК</div><div class="review-info"><div class="review-name">Ольга К.</div><div class="review-role">Директор салона красоты</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Бот для ответов на вопросы работает четко. Минус балл за коммуникацию: в середине проекта ответы в мессенджере иногда приходили с задержкой. В остальном качество кода на высоком уровне.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ВН</div><div class="review-info"><div class="review-name">Виктор Н.</div><div class="review-role">Руководитель производства</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Полный редизайн устаревшего сайта. Раньше было стыдно показывать его клиентам, теперь выглядит презентабельно. Порадовала оптимизация скорости: по тестам Google сайт теперь в зеленой зоне.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">НЛ</div><div class="review-info"><div class="review-name">Наталья Л.</div><div class="review-role">Организатор вебинаров</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Лендинг сделали за 4 дня. Дизайн аккуратный. Шрифт в мобильной версии поначалу казался мелковатым, попросила увеличить – сделали без вопросов. Поддержка после запуска работает оперативно.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ПГ</div><div class="review-info"><div class="review-name">Павел Г.</div><div class="review-role">Управляющий фитнес-клубом</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Автоматизировали прием заявок через бота. Раньше администраторы тратили много времени на обзвон, теперь бот сам собирает данные. Инструмент окупился в первый же месяц использования.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">РМ</div><div class="review-info"><div class="review-name">Роман М.</div><div class="review-role">Руководитель СТО</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Корпоративный сайт выглядит солидно. После запуска обнаружили, что на одной из моделей iPhone форма отправлялась с ошибкой. Сообщили разработчикам, баг устранили в тот же день.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">АР</div><div class="review-info"><div class="review-name">Андрей Р.</div><div class="review-role">Частный риелтор</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Понравилось, что на этапе брифинга задали много уточняющих вопросов о специфике работы, о которых я сам не подумал. Сайт получился удобным, первые обращения пошли на второй неделе.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ОК</div><div class="review-info"><div class="review-name">Ольга К.</div><div class="review-role">Директор салона красоты</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Бот для ответов на вопросы работает четко. Минус балл за коммуникацию: в середине проекта ответы в мессенджере иногда приходили с задержкой. В остальном качество кода на высоком уровне.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ВН</div><div class="review-info"><div class="review-name">Виктор Н.</div><div class="review-role">Руководитель производства</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Полный редизайн устаревшего сайта. Раньше было стыдно показывать его клиентам, теперь выглядит презентабельно. Порадовала оптимизация скорости: по тестам Google сайт теперь в зеленой зоне.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">НЛ</div><div class="review-info"><div class="review-name">Наталья Л.</div><div class="review-role">Организатор вебинаров</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Лендинг сделали за 4 дня. Дизайн аккуратный. Шрифт в мобильной версии поначалу казался мелковатым, попросила увеличить – сделали без вопросов. Поддержка после запуска работает оперативно.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ПГ</div><div class="review-info"><div class="review-name">Павел Г.</div><div class="review-role">Управляющий фитнес-клубом</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Автоматизировали прием заявок через бота. Раньше администраторы тратили много времени на обзвон, теперь бот сам собирает данные. Инструмент окупился в первый же месяц использования.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">РМ</div><div class="review-info"><div class="review-name">Роман М.</div><div class="review-role">Руководитель СТО</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Корпоративный сайт выглядит солидно. После запуска обнаружили, что на одной из моделей iPhone форма отправлялась с ошибкой. Сообщили разработчикам, баг устранили в тот же день.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">АР</div><div class="review-info"><div class="review-name">Андрей Р.</div><div class="review-role">Частный риелтор</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Понравилось, что на этапе брифинга задали много уточняющих вопросов о специфике работы, о которых я сам не подумал. Сайт получился удобным, первые обращения пошли на второй неделе.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ОК</div><div class="review-info"><div class="review-name">Ольга К.</div><div class="review-role">Директор салона красоты</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Бот для ответов на вопросы работает четко. Минус балл за коммуникацию: в середине проекта ответы в мессенджере иногда приходили с задержкой. В остальном качество кода на высоком уровне.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ВН</div><div class="review-info"><div class="review-name">Виктор Н.</div><div class="review-role">Руководитель производства</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Полный редизайн устаревшего сайта. Раньше было стыдно показывать его клиентам, теперь выглядит презентабельно. Порадовала оптимизация скорости: по тестам Google сайт теперь в зеленой зоне.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">НЛ</div><div class="review-info"><div class="review-name">Наталья Л.</div><div class="review-role">Организатор вебинаров</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Лендинг сделали за 4 дня. Дизайн аккуратный. Шрифт в мобильной версии поначалу казался мелковатым, попросила увеличить – сделали без вопросов. Поддержка после запуска работает оперативно.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">ПГ</div><div class="review-info"><div class="review-name">Павел Г.</div><div class="review-role">Управляющий фитнес-клубом</div></div></div><div class="review-stars">★★★★★</div><p class="review-text">Автоматизировали прием заявок через бота. Раньше администраторы тратили много времени на обзвон, теперь бот сам собирает данные. Инструмент окупился в первый же месяц использования.</p></div>
+      <div class="review-card"><div class="review-header"><div class="review-avatar">РМ</div><div class="review-info"><div class="review-name">Роман М.</div><div class="review-role">Руководитель СТО</div></div></div><div class="review-stars">★★★★☆</div><p class="review-text">Корпоративный сайт выглядит солидно. После запуска обнаружили, что на одной из моделей iPhone форма отправлялась с ошибкой. Сообщили разработчикам, баг устранили в тот же день.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+<div class="ct">
+<div class="contact-card fi">
+<svg class="plus plus-tl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>
+<svg class="plus plus-tr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>
+<svg class="plus plus-bl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>
+<svg class="plus plus-br" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>
+<div class="contact-card__info">
+<div>
+<h2 class="contact-card__title reveal-title" data-ru="Готовы обсудить<br>ваш проект? <em>Напишите нам.</em>" data-en="Ready to discuss<br>your project? <em>Write to us.</em>">Готовы обсудить<br>ваш проект? <em>Напишите нам.</em></h2>
+<p class="contact-card__desc reveal-title" data-ru="Расскажите о задаче — мы предложим решение, оценим сроки и стоимость. Без обязательств и навязчивых звонков." data-en="Tell us about your task — we'll suggest a solution, estimate timelines and cost. No obligations, no pushy calls.">Расскажите о задаче — мы предложим решение, оценим сроки и стоимость. Без обязательств и навязчивых звонков.</p>
+</div>
+<div class="contact-card__items">
+<div class="contact-card__item">
+<div class="contact-card__item-icon animated-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></div>
+<div><div class="contact-card__item-label" data-ru="Email" data-en="Email">Email</div><div class="contact-card__item-value"><a href="#" id="copyEmail">craft.1farc@gmail.com</a></div></div>
+</div>
+</div>
+</div>
+<div class="contact-card__form">
+<form id="contactForm">
+<input type="text" id="honeypot" name="website" style="display:none;" tabindex="-1" autocomplete="off">
+<div class="field"><label for="name" data-ru="Имя" data-en="Name">Имя</label><input type="text" id="name" data-ru-placeholder="Ваше имя" data-en-placeholder="Your name" placeholder="Ваше имя" required></div>
+<div class="field"><label for="email" data-ru="Email или Telegram" data-en="Email or Telegram">Email или Telegram</label><input type="text" id="email" data-ru-placeholder="you@example.com или @username" data-en-placeholder="you@example.com or @username" placeholder="you@example.com или @username" required></div>
+<div class="field"><label for="phone" data-ru="Телефон (необязательно)" data-en="Phone (optional)">Телефон (необязательно)</label><input type="tel" id="phone" data-ru-placeholder="+7 ..." data-en-placeholder="+1 ..." placeholder="+7 ..."></div>
+<div class="field"><label for="message" data-ru="Кратко о задаче" data-en="Brief about the task">Кратко о задаче</label><textarea id="message" data-ru-placeholder="Расскажите о вашем проекте..." data-en-placeholder="Tell us about your project..." placeholder="Расскажите о вашем проекте..." required></textarea></div>
+<button type="submit" data-ru="Отправить заявку" data-en="Send request">Отправить заявку</button>
+</form>
+<div class="cta-micro" data-ru="✓ Ответ за 2 часа · ✓ Без звонков · ✓ Бесплатно" data-en="✓ Reply in 2 hours · ✓ No calls · ✓ Free">✓ Ответ за 2 часа · ✓ Без звонков · ✓ Бесплатно</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="sec" id="faq">
+<div class="ct">
+<div class="sec-h">
+  <div class="sec-n reveal-title" data-ru="[11] — FAQ" data-en="[11] — FAQ">[11] — FAQ</div>
+  <h2 class="sec-t reveal-title" data-ru="Частые вопросы" data-en="Frequent questions">Частые вопросы</h2>
+  <p class="sec-sub reveal-title" data-ru="Отвечаем на то, о чём спрашивают чаще всего." data-en="Answering the most frequent questions.">Отвечаем на то, о чём спрашивают чаще всего.</p>
+</div>
+<div class="faq-list fi">
+  <div class="faq-item"><div class="faq-q"><span data-ru="Сколько точно стоит мой проект?" data-en="How much will my project cost exactly?">Сколько точно стоит мой проект?</span><span class="faq-toggle">+</span></div><div class="faq-a" data-ru="Каждая задача уникальна. Мы не берём цену «с потолка» — сначала разбираемся в ваших целях, потом называем точную сумму. Это бесплатно и ни к чему не обязывает. Ориентиры: лендинг от 25 000 ₽, магазин от 45 000 ₽, бот от 15 000 ₽." data-en="Every task is unique. We don't pull prices from thin air — first we understand your goals, then give an exact figure. It's free and no obligation. Benchmarks: landing from 25 000 ₽, store from 45 000 ₽, bot from 15 000 ₽.">Каждая задача уникальна. Мы не берём цену «с потолка» — сначала разбираемся в ваших целях, потом называем точную сумму. Это бесплатно и ни к чему не обязывает. Ориентиры: лендинг от 25 000 ₽, магазин от 45 000 ₽, бот от 15 000 ₽.</div></div>
+  <div class="faq-item"><div class="faq-q"><span data-ru="А если мне не понравится дизайн?" data-en="What if I don't like the design?">А если мне не понравится дизайн?</span><span class="faq-toggle">+</span></div><div class="faq-a" data-ru="Мы согласовываем прототип в Figma до начала разработки. Правки вносятся на этапе дизайна — до того, как написан код. Это исключает сюрпризы в конце." data-en="We approve the Figma prototype before coding. Revisions happen at the design stage — before code is written. This eliminates end-stage surprises.">Мы согласовываем прототип в Figma до начала разработки. Правки вносятся на этапе дизайна — до того, как написан код. Это исключает сюрпризы в конце.</div></div>
+  <div class="faq-item"><div class="faq-q"><span data-ru="Сайт будет работать на телефоне?" data-en="Will the site work on mobile?">Сайт будет работать на телефоне?</span><span class="faq-toggle">+</span></div><div class="faq-a" data-ru="Да, мы делаем 100% адаптивную вёрстку. Если нужно доработать мобильную версию — сделаем бесплатно по вашему запросу." data-en="Yes, we do 100% responsive layout. If you need mobile version improvements — we'll do it for free on request.">Да, мы делаем 100% адаптивную вёрстку. Если нужно доработать мобильную версию — сделаем бесплатно по вашему запросу.</div></div>
+  <div class="faq-item"><div class="faq-q"><span data-ru="Что будет после сдачи проекта?" data-en="What happens after project delivery?">Что будет после сдачи проекта?</span><span class="faq-toggle">+</span></div><div class="faq-a" data-ru="14 дней бесплатной технической поддержки включены в каждый проект. После — поддержка по отдельному соглашению." data-en="14 days of free technical support included in every project. After that — support by separate agreement.">14 дней бесплатной технической поддержки включены в каждый проект. После — поддержка по отдельному соглашению.</div></div>
+  <div class="faq-item"><div class="faq-q"><span data-ru="Можно ли в рассрочку?" data-en="Can I pay in installments?">Можно ли в рассрочку?</span><span class="faq-toggle">+</span></div><div class="faq-a" data-ru="Да. Стандартная схема: 50% предоплата, 50% после сдачи проекта. Для проектов от 100 000 ₽ возможно разбиение на 3 платежа." data-en="Yes. Standard scheme: 50% prepayment, 50% after delivery. For projects over 100 000 ₽, 3-installment split is possible.">Да. Стандартная схема: 50% предоплата, 50% после сдачи проекта. Для проектов от 100 000 ₽ возможно разбиение на 3 платежа.</div></div>
+  <div class="faq-item"><div class="faq-q"><span data-ru="А если нужно срочно?" data-en="What if it's urgent?">А если нужно срочно?</span><span class="faq-toggle">+</span></div><div class="faq-a" data-ru="Берём срочные проекты с доплатой 30–50% к стоимости. Минимальный реалистичный срок — 5–7 дней для лендинга. Обсуждается индивидуально." data-en="We take urgent projects with 30–50% surcharge. Minimum realistic timeline — 5–7 days for a landing page. Discussed individually.">Берём срочные проекты с доплатой 30–50% к стоимости. Минимальный реалистичный срок — 5–7 дней для лендинга. Обсуждается индивидуально.</div></div>
+</div>
+</div>
+</section>
+
+<footer><div>© 2026 CRAFT Studio</div><div data-ru="Создаём с вниманием к деталям" data-en="Created with attention to detail">Создаём с вниманием к деталям</div></footer>
+<script>
+window.addEventListener('scroll', function() {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('scrollProgress').style.width = pct + '%';
+});
+
+var ls = document.getElementById('ls');
+var cl = 'ru';
+ls.addEventListener('click', function() {
+  cl = cl === 'ru' ? 'en' : 'ru';
+  ls.textContent = cl === 'ru' ? 'EN' : 'RU';
+  document.querySelectorAll('[data-ru]').forEach(el => el.innerHTML = el.getAttribute('data-' + cl));
+  document.querySelectorAll('[data-ru-placeholder]').forEach(el => el.placeholder = el.getAttribute('data-' + cl + '-placeholder'));
+});
+
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('v');
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fi, .reveal-title, .animated-icon').forEach(el => observer.observe(el));
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    var target = document.querySelector(this.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+
+var emailLink = document.getElementById('copyEmail');
+if (emailLink) {
+  emailLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    navigator.clipboard.writeText('craft.1farc@gmail.com').then(function() {
+      emailLink.textContent = 'Скопировано!';
+      emailLink.style.color = 'var(--acc)';
+      setTimeout(function() { emailLink.textContent = 'craft.1farc@gmail.com'; emailLink.style.color = ''; }, 2000);
+    });
+  });
+}
+
+var form = document.getElementById('contactForm');
+if (form) {
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (document.getElementById('honeypot').value) return;
+    var btn = form.querySelector('button[type="submit"]');
+    var originalText = btn.textContent;
+    btn.textContent = cl === 'ru' ? 'Отправка...' : 'Sending...';
+    btn.disabled = true;
+    var text = 'Новая заявка с сайта CRAFT!\n\nИмя: ' + document.getElementById('name').value + '\nEmail/TG: ' + document.getElementById('email').value + '\nТелефон: ' + (document.getElementById('phone').value || 'не указан') + '\nЗадача: ' + document.getElementById('message').value;
+    fetch('https://royal-cell-9890.nori39424.workers.dev?chat_id=2110950091&text=' + encodeURIComponent(text))
+      .then(r => r.json()).then(d => {
+        if (d && d.ok) { btn.textContent = '✅ ' + (cl === 'ru' ? 'Отправлено!' : 'Sent!'); btn.className = 'success'; form.reset(); }
+        else throw new Error();
+      }).catch(() => { btn.textContent = '❌ ' + (cl === 'ru' ? 'Ошибка' : 'Error'); btn.className = 'error'; })
+      .finally(() => setTimeout(() => { btn.textContent = originalText; btn.className = ''; btn.disabled = false; }, 3000));
+  });
+}
+
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.addEventListener('click', function() {
+    var wasOpen = this.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) this.classList.add('open');
+  });
+});
+
+(function() {
+  var cards = document.querySelectorAll('.tilt-card');
+  var maxTilt = 10;
+  cards.forEach(function(card) {
+    card.addEventListener('mousemove', function(e) {
+      if (window.innerWidth <= 900) return;
+      var rect = card.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      var centerX = rect.width / 2;
+      var centerY = rect.height / 2;
+      var rotateX = ((y - centerY) / centerY) * -maxTilt;
+      var rotateY = ((x - centerX) / centerX) * maxTilt;
+      var mx = (x / rect.width) * 100;
+      var my = (y / rect.height) * 100;
+      card.style.transition = 'none';
+      card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-4px) scale(1.02)';
+      card.style.setProperty('--mx', mx + '%');
+      card.style.setProperty('--my', my + '%');
+    });
+    card.addEventListener('mouseleave', function() {
+      card.style.transition = 'transform .5s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow .3s ease';
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)';
+    });
+    card.addEventListener('mouseenter', function() {
+      card.style.transition = 'box-shadow .3s ease';
+    });
+  });
+})();
+
+document.querySelectorAll('.magnetic-card').forEach(card => {
+  card.addEventListener('mousemove', function(e) {
+    if (window.innerWidth <= 900) return;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const moveX = ((x - centerX) / centerX) * 8;
+    const moveY = ((y - centerY) / centerY) * 8;
+    card.style.transition = 'none';
+    card.style.transform = 'translate(' + moveX + 'px, ' + moveY + 'px)';
+  });
+  card.addEventListener('mouseleave', function() {
+    card.style.transition = 'transform .5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    card.style.transform = '';
+  });
+});
+
+document.querySelectorAll('.case-card').forEach(card => {
+  card.addEventListener('mousemove', function(e) {
+    if (window.innerWidth <= 900) return;
+    var rect = card.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = e.clientY - rect.top;
+    var mx = (x / rect.width) * 100;
+    var my = (y / rect.height) * 100;
+    card.style.setProperty('--mx', mx + '%');
+    card.style.setProperty('--my', my + '%');
+  });
+});
+
+(function() {
+  var cursor = document.getElementById('customCursor');
+  var srv = document.getElementById('srv');
+  if (!cursor || !srv) return;
+  var mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+  function animate() { cursorX += (mouseX - cursorX) * 0.18; cursorY += (mouseY - cursorY) * 0.18; cursor.style.left = cursorX + 'px'; cursor.style.top = cursorY + 'px'; requestAnimationFrame(animate); }
+  animate();
+  srv.addEventListener('mouseenter', () => cursor.classList.add('visible'));
+  srv.addEventListener('mouseleave', () => cursor.classList.remove('visible', 'clicking'));
+  document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+  srv.addEventListener('mousedown', () => cursor.classList.add('clicking'));
+  srv.addEventListener('mouseup', () => cursor.classList.remove('clicking'));
+})();
+
+(function() {
+  var canvas = document.getElementById('flow-canvas');
+  var srv = document.getElementById('srv');
+  if (!canvas || !srv) return;
+  var ctx = canvas.getContext('2d'), width, height, explosions = [], paths = [], numPaths = 80;
+  function resize() {
+    var dpr = window.devicePixelRatio || 1, rect = srv.getBoundingClientRect();
+    width = rect.width; height = rect.height; canvas.width = width * dpr; canvas.height = height * dpr; ctx.scale(dpr, dpr);
+  }
+  window.addEventListener('resize', resize);
+  srv.addEventListener('click', e => { var rect = canvas.getBoundingClientRect(); explosions.push({ x: e.clientX - rect.left, y: e.clientY - rect.top, radius: 0, life: 1 }); });
+  function initPaths() { paths.length = 0; for (var i = 0; i < numPaths; i++) paths.push({ isLeft: i % 2 === 0, startY: (i / numPaths) * height * 1.4 - height * 0.2, particles: [{ t: Math.random(), speed: 0.0015 + Math.random() * 0.002 }] }); }
+  function getBezierPoint(t, p0, p1, p2, p3) { var u = 1 - t; return { x: u*u*u*p0.x + 3*u*u*t*p1.x + 3*u*t*t*p2.x + t*t*t*p3.x, y: u*u*u*p0.y + 3*u*u*t*p1.y + 3*u*t*t*p2.y + t*t*t*p3.y }; }
+  function render() {
+    ctx.clearRect(0, 0, width, height);
+    var centerX = width / 2, centerY = height / 2;
+    for (var i = 0; i < explosions.length; i++) { explosions[i].radius += 15; explosions[i].life -= 0.015; }
+    explosions = explosions.filter(exp => exp.life > 0);
+    for (var i = 0; i < paths.length; i++) {
+      var path = paths[i];
+      var p0 = { x: path.isLeft ? 0 : width, y: path.startY };
+      var p1 = { x: path.isLeft ? centerX * 0.5 : width - centerX * 0.5, y: path.startY };
+      var p2 = { x: path.isLeft ? centerX * 0.8 : width - centerX * 0.8, y: centerY };
+      var p3 = { x: centerX, y: centerY };
+      ctx.beginPath(); ctx.moveTo(p0.x, p0.y); ctx.bezierCurveTo(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
+      ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 1; ctx.setLineDash([1, 4]); ctx.stroke(); ctx.setLineDash([]);
+      for (var j = 0; j < path.particles.length; j++) {
+        var p = path.particles[j]; p.t += p.speed;
+        if (p.t > 1) { p.t = 0; path.startY += (Math.random() - 0.5) * 10; }
+        var pos = getBezierPoint(p.t, p0, p1, p2, p3);
+        var dxTotal = 0, dyTotal = 0;
+        for (var k = 0; k < explosions.length; k++) {
+          var exp = explosions[k], dx = pos.x - exp.x, dy = pos.y - exp.y, dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < exp.radius + 120 && dist > exp.radius - 120) {
+            var force = (1 - Math.abs(dist - exp.radius) / 120) * exp.life;
+            dxTotal += (dx / dist) * force * 80; dyTotal += (dy / dist) * force * 80;
+          }
+        }
+        pos.x += dxTotal; pos.y += dyTotal;
+        ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.shadowColor = 'rgba(255,255,255,0.6)'; ctx.shadowBlur = 4;
+        ctx.fillRect(pos.x - 1.5, pos.y - 1.5, 3, 3); ctx.shadowBlur = 0;
+      }
+    }
+    requestAnimationFrame(render);
+  }
+  var canvasObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => { if (entry.isIntersecting) { resize(); initPaths(); render(); canvasObserver.disconnect(); } });
+  }, { threshold: 0.1 });
+  canvasObserver.observe(srv);
+})();
+
+// LiveOrb WebGL Component - Vanilla JS Implementation (SLOW TRACKING)
+(function() {
+  const canvas = document.getElementById('live-orb-canvas');
+  const fallback = document.getElementById('live-orb-fallback');
+  if (!canvas) return;
+
+  const gl = canvas.getContext('webgl', { alpha: true, antialias: false, depth: false, stencil: false, premultipliedAlpha: false, powerPreference: 'high-performance' });
+  if (!gl) {
+    if (fallback) fallback.style.display = 'block';
+    return;
+  }
+
+  const VERT = `
+    attribute vec2 a_position;
+    void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
+  `;
+
+  const FRAG = `
+    precision highp float;
+    uniform vec2 u_resolution;
+    uniform float u_time;
+    uniform float u_speed;
+    uniform vec2 u_look;
+    uniform float u_blink;
+    uniform float u_mode;
+    uniform vec3 u_body;
+    uniform vec3 u_eye;
+    uniform vec3 u_c1;
+    uniform vec3 u_c2;
+    uniform vec3 u_c3;
+
+    float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123); }
+    float noise(vec2 p) {
+      vec2 i = floor(p); vec2 f = fract(p);
+      float a = hash(i); float b = hash(i + vec2(1.0, 0.0));
+      float c = hash(i + vec2(0.0, 1.0)); float d = hash(i + vec2(1.0, 1.0));
+      vec2 u = f * f * (3.0 - 2.0 * f);
+      return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+    }
+    float fbm(vec2 p) {
+      float v = 0.0; float a = 0.5; mat2 m = mat2(1.6, 1.2, -1.2, 1.6);
+      for (int i = 0; i < 5; i++) { v += a * noise(p); p = m * p; a *= 0.5; }
+      return v;
+    }
+    vec3 orient(vec3 p, vec2 look) {
+      float yaw = look.x * 0.92; float pitch = -look.y * 0.78;
+      float cy = cos(yaw); float sy = sin(yaw); float cp = cos(pitch); float sp = sin(pitch);
+      vec3 q = vec3(p.x, p.y * cp - p.z * sp, p.y * sp + p.z * cp);
+      return vec3(q.x * cy + q.z * sy, q.y, -q.x * sy + q.z * cy);
+    }
+    float eyeMask(vec3 n, vec3 e, vec3 right, vec3 up, float halfH, float rad) {
+      float facing = dot(n, e);
+      float x = dot(n, right) - dot(e, right);
+      float y = dot(n, up) - dot(e, up);
+      y -= clamp(y, -halfH, halfH);
+      float d = length(vec2(x, y)) - rad;
+      float fill = 1.0 - smoothstep(-0.01, 0.01, d);
+      return fill * smoothstep(0.12, 0.32, facing);
+    }
+    vec3 wash(vec3 n, float t) {
+      vec2 q = n.xy * 2.2 + n.z * 0.85;
+      vec2 w1 = vec2(fbm(q * 1.4 + vec2(t * 0.22, t * 0.18)), fbm(q * 1.4 + vec2(-t * 0.16, t * 0.24) + 4.1));
+      q += (w1 - 0.5) * 0.72;
+      float f = fbm(q * 2.1 + vec2(0.0, t * 0.12));
+      float g = fbm(q * 4.6 - vec2(t * 0.2, 0.0));
+      vec3 col = mix(u_c1, u_c2, smoothstep(0.28, 0.72, f));
+      return mix(col, u_c3, pow(smoothstep(0.42, 0.9, g), 1.4));
+    }
+    void main() {
+      vec2 uv = (gl_FragCoord.xy / u_resolution.xy) * 2.0 - 1.0;
+      float aspect = u_resolution.x / max(u_resolution.y, 1.0);
+      uv.x *= aspect;
+      float radius = 0.94;
+      vec2 p = uv / radius;
+      float r2 = dot(p, p);
+      float edge = 1.0 - smoothstep(0.985, 1.012, sqrt(max(r2, 0.0)));
+      if (edge <= 0.001) { gl_FragColor = vec4(0.0); return; }
+      float z = sqrt(max(1.0 - r2, 0.0));
+      vec3 n = normalize(vec3(p, z));
+      vec2 look = u_look;
+      float lm = length(look);
+      if (lm > 1.0) look /= lm;
+      vec3 right = orient(vec3(1.0, 0.0, 0.0), look);
+      vec3 up = orient(vec3(0.0, 1.0, 0.0), look);
+      vec3 eL = orient(normalize(vec3(-0.32, 0.08, 1.0)), look);
+      vec3 eR = orient(normalize(vec3(0.32, 0.08, 1.0)), look);
+      float halfH = mix(0.128, 0.012, u_blink);
+      float rad = mix(0.054, 0.062, u_blink);
+      float eyes = max(eyeMask(n, eL, right, up, halfH, rad), eyeMask(n, eR, right, up, halfH, rad));
+      vec3 body = u_mode > 0.5 ? wash(n, u_time * u_speed) : u_body;
+      vec3 col = mix(body, u_eye, clamp(eyes, 0.0, 1.0));
+      gl_FragColor = vec4(clamp(col, 0.0, 1.0), edge);
+    }
+  `;
+
+  function compile(gl, type, source) {
+    const shader = gl.createShader(type);
+    if (!shader) return null;
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  }
+
+  const vs = compile(gl, gl.VERTEX_SHADER, VERT);
+  const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
+  if (!vs || !fs) { if (fallback) fallback.style.display = 'block'; return; }
+
+  const program = gl.createProgram();
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+  gl.useProgram(program);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(program, 'a_position');
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+  const uResolution = gl.getUniformLocation(program, 'u_resolution');
+  const uTime = gl.getUniformLocation(program, 'u_time');
+  const uSpeed = gl.getUniformLocation(program, 'u_speed');
+  const uLook = gl.getUniformLocation(program, 'u_look');
+  const uBlink = gl.getUniformLocation(program, 'u_blink');
+  const uMode = gl.getUniformLocation(program, 'u_mode');
+  const uBody = gl.getUniformLocation(program, 'u_body');
+  const uEye = gl.getUniformLocation(program, 'u_eye');
+  const uC1 = gl.getUniformLocation(program, 'u_c1');
+  const uC2 = gl.getUniformLocation(program, 'u_c2');
+  const uC3 = gl.getUniformLocation(program, 'u_c3');
+
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+  const look = { x: 0, y: 0.08 };
+  const targetLook = { x: 0, y: 0.08 };
+  let reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let raf = 0;
+  let running = true;
+  const start = performance.now();
+  let nextBlink = start + 4000 + Math.random() * 6000;
+  let blinkAt = -10000;
+
+  function resize() {
+    const parent = canvas.parentElement;
+    if (!parent) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = parent.clientWidth;
+    const h = parent.clientHeight;
+    if (w <= 0 || h <= 0) return;
+    canvas.width = Math.max(1, Math.floor(w * dpr));
+    canvas.height = Math.max(1, Math.floor(h * dpr));
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+  resize();
+  const ro = new ResizeObserver(resize);
+  if (canvas.parentElement) ro.observe(canvas.parentElement);
+
+  // Global cursor tracking - eyes follow cursor anywhere on page
+  window.addEventListener('pointermove', function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const dx = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+    const dy = (rect.top + rect.height / 2 - e.clientY) / (rect.height / 2);
+    targetLook.x = Math.min(1, Math.max(-1, dx));
+    targetLook.y = Math.min(1, Math.max(-1, dy));
+  }, { passive: true });
+
+  const body = [0.96, 0.96, 0.96]; // White orb
+  const eye = [0.04, 0.04, 0.04]; // Dark eyes
+  const colors = [[0.49, 0.42, 0.97], [0.49, 0.83, 0.78], [0.91, 0.70, 0.83]]; // Violet/foam/dust-rose
+
+  function tick(now) {
+    if (!running) return;
+    const time = (now - start) / 1000;
+
+    // SLOW eye movement (0.06 instead of 0.16)
+    look.x += (targetLook.x - look.x) * 0.06;
+    look.y += (targetLook.y - look.y) * 0.06;
+
+    // Blink logic
+    if (!reduce && now >= nextBlink) {
+      blinkAt = now;
+      nextBlink = now + 4000 + Math.random() * 6000;
+    }
+    const bt = (now - blinkAt) / 1000;
+    let b = 0;
+    if (!reduce) {
+      if (bt < 0.055) b = bt / 0.055;
+      else if (bt < 0.1) b = 1;
+      else if (bt < 0.18) b = 1 - (bt - 0.1) / 0.08;
+    }
+
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.uniform2f(uResolution, canvas.width, canvas.height);
+    gl.uniform1f(uTime, reduce ? 0 : time);
+    gl.uniform1f(uSpeed, reduce ? 0 : 0.55);
+    gl.uniform2f(uLook, look.x, look.y);
+    gl.uniform1f(uBlink, b);
+    gl.uniform1f(uMode, 1); // WebGL mode
+    gl.uniform3f(uBody, body[0], body[1], body[2]);
+    gl.uniform3f(uEye, eye[0], eye[1], eye[2]);
+    gl.uniform3f(uC1, colors[0][0], colors[0][1], colors[0][2]);
+    gl.uniform3f(uC2, colors[1][0], colors[1][1], colors[1][2]);
+    gl.uniform3f(uC3, colors[2][0], colors[2][1], colors[2][2]);
+
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    raf = requestAnimationFrame(tick);
+  }
+
+  raf = requestAnimationFrame(tick);
+
+  // Cleanup on page unload
+  window.addEventListener('beforeunload', function() {
+    running = false;
+    cancelAnimationFrame(raf);
+    ro.disconnect();
+    gl.deleteProgram(program);
+    gl.deleteShader(vs);
+    gl.deleteShader(fs);
+    gl.deleteBuffer(buf);
+  });
+})();
+</script>
+</body>
+</html>
