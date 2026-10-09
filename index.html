@@ -16,9 +16,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 
 .ct{max-width:1440px;margin:0 auto;padding:0 2.5rem}
 header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(15,16,17,.6);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-nav{display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2.5rem;max-width:1440px;margin:0 auto}
-.logo{font-family:'Space Grotesk';font-size:1.1rem;font-weight:600;letter-spacing:.02em}
-.logo span{color:var(--acc)}
+nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 2.5rem;max-width:1440px;margin:0 auto}
+.logo-img{height:40px;width:auto;display:block;filter:drop-shadow(0 2px 4px rgba(122,154,176,0.2));transition:filter .3s ease}
+.logo-img:hover{filter:drop-shadow(0 4px 8px rgba(122,154,176,0.4))}
 .nav-r{display:flex;gap:2rem;align-items:center}
 .nav-r a{color:var(--tx2);text-decoration:none;font-size:.85rem;transition:color .3s;position:relative}
 .nav-r a:hover{color:var(--tx)}
@@ -36,11 +36,11 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:1.25re
 .hero-title{font-family:'Space Grotesk';font-size:clamp(3rem, 6vw, 6rem);font-weight:700;line-height:1.05;letter-spacing:-.03em;position:relative;z-index:2;color:rgba(255,255,255,0.12);text-shadow:0 1px 0 rgba(255,255,255,0.1),0 2px 0 rgba(255,255,255,0.08),0 3px 0 rgba(255,255,255,0.06);text-align:center}
 .hero-title em{font-style:normal;color:var(--tx)}
 .hero-sub{margin-top:1.2rem;font-size:.85rem;color:rgba(255,255,255,0.6);font-weight:300;letter-spacing:.05em}
-.hero-bottom{position:absolute;bottom:12%;left:2.5rem;z-index:2;max-width:280px}
-.hero-desc{font-size:.8rem;color:var(--tx2);font-weight:300;line-height:1.55;margin-bottom:1.5rem}
-.btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--tx);color:var(--bg);padding:.75rem 1.3rem;border-radius:4px;font-weight:500;font-size:.8rem;text-decoration:none;transition:.3s;border:1px solid var(--tx);cursor:pointer}
+.hero-bottom{position:absolute;bottom:12%;left:2.5rem;z-index:2;max-width:340px}
+.hero-desc{font-size:1rem;color:var(--tx2);font-weight:300;line-height:1.6;margin-bottom:1.8rem}
+.btn{display:inline-flex;align-items:center;gap:.6rem;background:var(--tx);color:var(--bg);padding:1rem 1.6rem;border-radius:6px;font-weight:500;font-size:.95rem;text-decoration:none;transition:.3s;border:1px solid var(--tx);cursor:pointer}
 .btn:hover{background:transparent;color:var(--tx)}
-.btn svg{width:12px;height:12px;fill:currentColor}
+.btn svg{width:14px;height:14px;fill:currentColor}
 .sec{padding:7rem 0;border-top:1px solid var(--line);position:relative;overflow:hidden;background:#000}
 .sec-h{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:4rem;position:relative;z-index:1}
 .sec-n{font-family:var(--mono);font-size:.7rem;color:var(--acc);letter-spacing:.1em;margin-bottom:1rem}
@@ -250,7 +250,6 @@ footer{padding:2rem 2.5rem;border-top:1px solid var(--line);display:flex;justify
 .why-title{font-family:'Space Grotesk';font-size:1.4rem;font-weight:600;color:var(--tx);margin-bottom:1rem;letter-spacing:-.01em}
 .why-text{font-size:.95rem;color:var(--tx2);font-weight:300;line-height:1.6}
 
-/* LiveOrb Section - aligned with STRIDE, no border/background */
 .cases-wrapper{display:grid;grid-template-columns:400px 1fr;grid-template-rows:auto auto auto;gap:2rem;align-items:start}
 .live-orb-section{grid-column:1;grid-row:2;position:relative}
 .live-orb-container{width:100%;height:400px;position:relative;overflow:visible}
@@ -270,7 +269,7 @@ footer{padding:2rem 2.5rem;border-top:1px solid var(--line);display:flex;justify
 
 @media(max-width:900px){
   .ct{padding:0 1.25rem}
-  nav{padding:1rem 1.25rem}
+  nav{padding:0.8rem 1.25rem}
   .nav-r a:not(.ls){display:none}
   .hero-glass{padding:1.5rem 1.5rem;max-width:95vw}
   .hero-title{font-size:clamp(2rem, 8vw, 3rem)}
@@ -291,6 +290,7 @@ footer{padding:2rem 2.5rem;border-top:1px solid var(--line);display:flex;justify
   .case-card{grid-template-columns:1fr;gap:1.5rem}
   .case-card__meta{grid-template-columns:1fr}
   .live-orb-container{height:250px}
+  .logo-img{height:32px}
 }
 </style>
 </head>
@@ -303,7 +303,9 @@ footer{padding:2rem 2.5rem;border-top:1px solid var(--line);display:flex;justify
   <div class="custom-cursor__dot"></div>
 </div>
 <header><nav>
-<div class="logo">CRAFT<span>.</span></div>
+<a href="#" class="logo-link" style="text-decoration:none;display:flex;align-items:center">
+  <img src="logo.png" alt="CRAFT" class="logo-img">
+</a>
 <div class="nav-r">
 <a href="#services">Услуги</a>
 <a href="#process">Процесс</a>
@@ -455,7 +457,6 @@ footer{padding:2rem 2.5rem;border-top:1px solid var(--line);display:flex;justify
 </div>
 
 <div class="cases-wrapper">
-  <!-- LiveOrb - aligned with STRIDE (row 2), no border/background -->
   <div class="live-orb-section fi d1">
     <div class="live-orb-container">
       <canvas class="live-orb-canvas" id="live-orb-canvas"></canvas>
@@ -466,7 +467,6 @@ footer{padding:2rem 2.5rem;border-top:1px solid var(--line);display:flex;justify
     </div>
   </div>
 
-  <!-- Cases List - spans all 3 rows in right column -->
   <div class="cases-list">
     <a href="https://nell803.github.io/noircoffee/" target="_blank" rel="noopener" class="case-card fi d1">
       <div class="case-card__preview"><div class="case-card__image" style="background-image: url('фото%20для%20портфолио/noir-preview.jpg');"></div><div class="live-badge"><span class="live-badge__dot"></span>Live</div></div>
@@ -692,7 +692,6 @@ if (emailLink) {
   });
 }
 
-// === ОБНОВЛЁННАЯ ОТПРАВКА ФОРМЫ ЧЕРЕЗ MAKE.COM ===
 var form = document.getElementById('contactForm');
 if (form) {
   form.addEventListener('submit', function(e) {
@@ -704,7 +703,6 @@ if (form) {
     btn.textContent = 'Отправка...';
     btn.disabled = true;
     
-    // НОВЫЙ URL ВЕБХУКА MAKE.COM
     var webhookUrl = 'https://hook.eu1.make.com/qjtv25pxkickwpu516tcg5s6vv5q291v';
     
     var data = {
@@ -730,7 +728,7 @@ if (form) {
       }
     })
     .catch(err => {
-      console.error('❌ КРИТИЧЕСКАЯ ОШИБКА ОТПРАВКИ:', err);
+      console.error('❌ Ошибка:', err);
       btn.textContent = '❌ Ошибка';
       btn.className = 'error';
     })
@@ -877,7 +875,6 @@ document.querySelectorAll('.case-card').forEach(card => {
   canvasObserver.observe(srv);
 })();
 
-// LiveOrb WebGL Component - Vanilla JS Implementation (SLOW TRACKING)
 (function() {
   const canvas = document.getElementById('live-orb-canvas');
   const fallback = document.getElementById('live-orb-fallback');
@@ -889,10 +886,7 @@ document.querySelectorAll('.case-card').forEach(card => {
     return;
   }
 
-  const VERT = `
-    attribute vec2 a_position;
-    void main() { gl_Position = vec4(a_position, 0.0, 1.0); }
-  `;
+  const VERT = `attribute vec2 a_position; void main() { gl_Position = vec4(a_position, 0.0, 1.0); }`;
 
   const FRAG = `
     precision highp float;
@@ -1059,7 +1053,6 @@ document.querySelectorAll('.case-card').forEach(card => {
     if (!running) return;
     const time = (now - start) / 1000;
 
-    // SLOW eye movement
     look.x += (targetLook.x - look.x) * 0.06;
     look.y += (targetLook.y - look.y) * 0.06;
 
