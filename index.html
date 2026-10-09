@@ -692,7 +692,7 @@ if (emailLink) {
   });
 }
 
-// === ОБНОВЛЁННАЯ ФОРМА С НОВЫМ WORKER URL И ОТЛАДКОЙ ===
+// === ОБНОВЛЁННАЯ ОТПРАВКА ФОРМЫ ЧЕРЕЗ MAKE.COM ===
 var form = document.getElementById('contactForm');
 if (form) {
   form.addEventListener('submit', function(e) {
@@ -701,47 +701,44 @@ if (form) {
     
     var btn = form.querySelector('button[type="submit"]');
     var originalText = btn.textContent;
-    btn.textContent = cl === 'ru' ? 'Отправка...' : 'Sending...';
+    btn.textContent = 'Отправка...';
     btn.disabled = true;
     
-    var name = document.getElementById('name').value;
-    var email = document.getElementById('email').value;
-    var phone = document.getElementById('phone').value || 'не указан';
-    var message = document.getElementById('message').value;
+    // НОВЫЙ URL ВЕБХУКА MAKE.COM
+    var webhookUrl = 'https://hook.eu1.make.com/qjtv25pxkickwpu516tcg5s6vv5q291v';
     
-    var text = '🔥 Новая заявка с сайта CRAFT!\n\n👤 Имя: ' + name + '\n📧 Email/TG: ' + email + '\n📱 Телефон: ' + phone + '\n💬 Задача: ' + message;
-    
-    // НОВЫЙ URL WORKER'А
-    var url = 'https://holy-brook-953a.nori39424.workers.dev?chat_id=2110950091&text=' + encodeURIComponent(text);
-    
-    console.log('📤 Отправка запроса на:', url);
+    var data = {
+      "Имя": document.getElementById('name').value,
+      "Email_TG": document.getElementById('email').value,
+      "Телефон": document.getElementById('phone').value || 'не указан',
+      "Задача": document.getElementById('message').value
+    };
 
-    fetch(url, { method: 'GET', mode: 'cors' })
-      .then(r => {
-        console.log('📡 Статус ответа:', r.status, r.statusText);
-        if (!r.ok) throw new Error('HTTP ошибка: ' + r.status);
-        return r.json();
-      })
-      .then(d => {
-        console.log('✅ Ответ от Worker:', d);
-        if (d && d.ok) { 
-          btn.textContent = '✅ ' + (cl === 'ru' ? 'Отправлено!' : 'Sent!'); 
-          btn.className = 'success'; 
-          form.reset(); 
-        } else { 
-          throw new Error('Worker вернул ошибку: ' + JSON.stringify(d)); 
-        }
-      })
-      .catch(err => { 
-        console.error('❌ КРИТИЧЕСКАЯ ОШИБКА ОТПРАВКИ:', err); 
-        btn.textContent = '❌ ' + (cl === 'ru' ? 'Ошибка' : 'Error'); 
-        btn.className = 'error'; 
-      })
-      .finally(() => setTimeout(() => { 
-        btn.textContent = originalText; 
-        btn.className = ''; 
-        btn.disabled = false; 
-      }, 3000));
+    fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(r => {
+      console.log('✅ Ответ от Make:', r.status);
+      if (r.ok) {
+        btn.textContent = '✅ Отправлено!';
+        btn.className = 'success';
+        form.reset();
+      } else {
+        throw new Error('Ошибка сервера');
+      }
+    })
+    .catch(err => {
+      console.error('❌ КРИТИЧЕСКАЯ ОШИБКА ОТПРАВКИ:', err);
+      btn.textContent = '❌ Ошибка';
+      btn.className = 'error';
+    })
+    .finally(() => setTimeout(() => { 
+      btn.textContent = originalText; 
+      btn.className = ''; 
+      btn.disabled = false; 
+    }, 3000));
   });
 }
 
